@@ -1,0 +1,190 @@
+\begin{thebibliography}{30}
+\providecommand{\natexlab}[1]{#1}
+\providecommand{\url}[1]{\texttt{#1}}
+\expandafter\ifx\csname urlstyle\endcsname\relax
+  \providecommand{\doi}[1]{doi: #1}\else
+  \providecommand{\doi}{doi: \begingroup \urlstyle{rm}\Url}\fi
+
+\bibitem[Applegate et~al.(2025)Applegate, Díaz, Hinder, Lu, Lubin, O'Donoghue,
+  and Schudy]{applegate2025pdlp}
+David Applegate, Mateo Díaz, Oliver Hinder, Haihao Lu, Miles Lubin, Brendan
+  O'Donoghue, and Warren Schudy.
+\newblock Pdlp: A practical first-order method for large-scale linear
+  programming.
+\newblock \emph{arXiv preprint arXiv:2501.07018}, 2025.
+
+\bibitem[Bai(2024)]{bai2024sinkhorn}
+Yikun Bai.
+\newblock Sinkhorn algorithms and linear programming solvers for optimal
+  partial transport problems.
+\newblock \emph{arXiv preprint arXiv:2407.06481}, 2024.
+
+\bibitem[Bargetto et~al.(2023)Bargetto, Croce, and
+  Scatamacchia]{bargetto2023iterated}
+Roberto Bargetto, Federico~Della Croce, and Rosario Scatamacchia.
+\newblock Iterated inside out: a new exact algorithm for the transportation
+  problem.
+\newblock \emph{arXiv preprint arXiv:2302.10826}, 2023.
+
+\bibitem[Bridgelall(2022)]{bridgelall2022tutorial}
+Raj Bridgelall.
+\newblock Tutorial and practice in linear programming: Optimization problems in
+  supply chain and transport logistics.
+\newblock \emph{arXiv preprint arXiv:2211.07345}, 2022.
+
+\bibitem[Cederberg and Boyd(2026)]{cederberg2026presolve}
+Daniel Cederberg and Stephen Boyd.
+\newblock Presolving for gpu-accelerated first-order lp solvers.
+\newblock \emph{arXiv preprint arXiv:2604.23951}, 2026.
+
+\bibitem[Cornelis and Vanroose(2021)]{cornelis2021regularized}
+Jeffrey Cornelis and Wim Vanroose.
+\newblock Convergence analysis of a regularized inexact interior-point method
+  for linear programming problems.
+\newblock \emph{arXiv preprint arXiv:2105.01333}, 2021.
+
+\bibitem[Cornelissen and Manthey(2015)]{cornelissen2015smoothed}
+Kamiel Cornelissen and Bodo Manthey.
+\newblock Smoothed analysis of the minimum-mean cycle canceling algorithm and
+  the network simplex algorithm.
+\newblock \emph{arXiv preprint arXiv:1504.08251}, 2015.
+
+\bibitem[Dai et~al.(2019)Dai, Zhao, and Liu]{dai2019mcf}
+Liyun Dai, Hengjun Zhao, and Zhiming Liu.
+\newblock Solving splitted multi-commodity flow problem by efficient linear
+  programming algorithm.
+\newblock \emph{arXiv preprint arXiv:1903.07469}, 2019.
+
+\bibitem[Dantzig(1951)]{dantzig1951application}
+George~B. Dantzig.
+\newblock Application of the simplex method to a transportation problem.
+\newblock In Tjalling~C. Koopmans, editor, \emph{Activity Analysis of
+  Production and Allocation}, chapter XXIII. John Wiley \& Sons, New York,
+  1951.
+
+\bibitem[Guan et~al.(2026)Guan, Hijazi, and Hentenryck]{guan2026supplychain}
+Changkun Guan, Amira Hijazi, and Pascal~Van Hentenryck.
+\newblock End-to-end supply chain planning in the paper industry via column
+  generation and benders decomposition.
+\newblock \emph{arXiv preprint arXiv:2607.16618}, 2026.
+
+\bibitem[Hitchcock(1941)]{hitchcock1941distribution}
+Frank~L. Hitchcock.
+\newblock The distribution of a product from several sources to numerous
+  localities.
+\newblock \emph{Journal of Mathematics and Physics}, 20\penalty0
+  (1--4):\penalty0 224--230, 1941.
+
+\bibitem[Holzhauser et~al.(2016)Holzhauser, Krumke, and
+  Thielen]{holzhauser2016network}
+Michael Holzhauser, Sven~O. Krumke, and Clemens Thielen.
+\newblock A network simplex method for the budget-constrained minimum cost flow
+  problem.
+\newblock \emph{arXiv preprint arXiv:1607.02284}, 2016.
+
+\bibitem[Huangfu and Hall(2015)]{huangfu2015parallel}
+Q.~Huangfu and J.~A.~J. Hall.
+\newblock Parallelizing the dual revised simplex method.
+\newblock \emph{arXiv preprint arXiv:1503.01889}, 2015.
+
+\bibitem[Huangfu and Hall(2018)]{huangfu2018highs}
+Q.~Huangfu and J.~A.~J. Hall.
+\newblock {HiGHS}: High-performance software for linear optimization.
+\newblock \emph{Mathematical Programming Computation}, 10:\penalty0 109--130,
+  2018.
+\newblock \doi{10.1007/s12532-017-0130-5}.
+
+\bibitem[Im and Wolkowicz(2022)]{im2022degeneracy}
+Jiyoung Im and Henry Wolkowicz.
+\newblock Revisiting degeneracy, strict feasibility, stability, in linear
+  programming.
+\newblock \emph{arXiv preprint arXiv:2203.02795}, 2022.
+
+\bibitem[Kantorovich(1960)]{kantorovich1960mathematical}
+Leonid~V. Kantorovich.
+\newblock Mathematical methods of organizing and planning production.
+\newblock \emph{Management Science}, 6\penalty0 (4):\penalty0 366--422, 1960.
+\newblock Translation of the 1939 Russian original.
+
+\bibitem[Karmarkar(1984)]{karmarkar1984new}
+Narendra Karmarkar.
+\newblock A new polynomial-time algorithm for linear programming.
+\newblock \emph{Combinatorica}, 4\penalty0 (4):\penalty0 373--395, 1984.
+
+\bibitem[Li et~al.(2026)Li, Huang, Liu, Ge, and Ye]{li2026dpdlp}
+Hongpei Li, Yicheng Huang, Huikang Liu, Dongdong Ge, and Yinyu Ye.
+\newblock D-pdlp: Scaling pdlp to distributed multi-gpu systems.
+\newblock \emph{arXiv preprint arXiv:2601.07628}, 2026.
+
+\bibitem[Lin et~al.(2018)Lin, Ma, Ye, and Zhang]{lin2018admm}
+Tianyi Lin, Shiqian Ma, Yinyu Ye, and Shuzhong Zhang.
+\newblock An admm-based interior-point method for large-scale linear
+  programming.
+\newblock \emph{arXiv preprint arXiv:1805.12344}, 2018.
+
+\bibitem[Lu et~al.(2025)Lu, Peng, and Yang]{lu2025cupdlpx}
+Haihao Lu, Zedong Peng, and Jinwen Yang.
+\newblock cupdlpx: A further enhanced gpu-based first-order solver for linear
+  programming.
+\newblock \emph{arXiv preprint arXiv:2507.14051}, 2025.
+
+\bibitem[Mehlhorn and Saxena(2015)]{mehlhorn2015ipm}
+Kurt Mehlhorn and Sanjeev Saxena.
+\newblock A still simpler way of introducing the interior-point method for
+  linear programming.
+\newblock \emph{arXiv preprint arXiv:1510.03339}, 2015.
+
+\bibitem[Munari et~al.(2016)Munari, Dollevoet, and Spliet]{munari2016vrp}
+Pedro Munari, Twan Dollevoet, and Remy Spliet.
+\newblock A generalized formulation for vehicle routing problems.
+\newblock \emph{arXiv preprint arXiv:1606.01935}, 2016.
+
+\bibitem[Nickel et~al.(2026)Nickel, Puerto, Ramoser, and
+  Torrejon]{nickel2026monge}
+Stefan Nickel, Justo Puerto, Simon Ramoser, and Alberto Torrejon.
+\newblock Revisiting transportation problems under monge costs with
+  applications to the discrete ordered median problem.
+\newblock \emph{arXiv preprint arXiv:2602.15151}, 2026.
+
+\bibitem[Prasad and Sharma(2026)]{prasad2026tuning}
+Siddharth Prasad and Dravyansh Sharma.
+\newblock Parameter tuning with generalization guarantees for gpu-accelerated
+  linear programming.
+\newblock \emph{arXiv preprint arXiv:2606.08638}, 2026.
+
+\bibitem[Rothberg(2026)]{rothberg2026hybrid}
+Edward Rothberg.
+\newblock Hybridizing pdhg and interior-point methods.
+\newblock \emph{arXiv preprint arXiv:2603.03150}, 2026.
+
+\bibitem[Saraswathi and Kümmerle(2026)]{saraswathi2026support}
+Sindura Saraswathi and Christian Kümmerle.
+\newblock Support discovery with iteratively reweighted least squares for
+  fixed-charge network flow.
+\newblock \emph{arXiv preprint arXiv:2609.09295}, 2026.
+
+\bibitem[Su et~al.(2025)Su, Qin, Li, and Zhang]{su2025freight}
+E~Su, Hu~Qin, Jiliu Li, and Rui Zhang.
+\newblock The freight multimodal transport problem with buses and drones: An
+  integrated approach for last-mile delivery.
+\newblock \emph{arXiv preprint arXiv:2506.10311}, 2025.
+
+\bibitem[Sul et~al.(2026)Sul, Oshin, and Theodorou]{sul2026rl}
+Jinhwan Sul, Alex Oshin, and Evangelos~A. Theodorou.
+\newblock Reinforcement learning to accelerate primal-dual hybrid gradient for
+  linear programming.
+\newblock \emph{arXiv preprint arXiv:2610.01546}, 2026.
+
+\bibitem[van~den Brand and Zhang(2023)]{brand2023mcf}
+Jan van~den Brand and Daniel Zhang.
+\newblock Faster high accuracy multi-commodity flow from single-commodity
+  techniques.
+\newblock \emph{arXiv preprint arXiv:2304.12992}, 2023.
+
+\bibitem[Watanabe et~al.(2017)Watanabe, Tanaka, and
+  Watanabe]{watanabe2017network}
+Sennosuke Watanabe, Hodaka Tanaka, and Yoshihide Watanabe.
+\newblock Network simplex algorithm associated with the maximum flow problem.
+\newblock \emph{arXiv preprint arXiv:1706.04302}, 2017.
+
+\end{thebibliography}

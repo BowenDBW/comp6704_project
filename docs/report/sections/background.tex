@@ -1,0 +1,38 @@
+\section{Background and Preliminaries}
+\label{sec:background}
+
+\subsection{The Transportation Problem as a Linear Program}
+
+The linear programming (LP) model traces its origins to production planning \citep{kantorovich1960mathematical}, and its first large-scale application was the classical transportation problem \citep{hitchcock1941distribution,dantzig1951application}. Given a set of $m$ supply nodes (e.g., depots) with supplies $s_i \geq 0$, a set of $n$ demand nodes (e.g., retailers) with demands $d_j \geq 0$, and per-unit shipping costs $c_{ij} \geq 0$, the \emph{transportation problem} asks for a shipping plan $x \in \mathbb{R}^{mn}_{\geq 0}$ that minimizes total cost:
+\begin{align}
+  \min_{x} \quad & \sum_{i=1}^{m}\sum_{j=1}^{n} c_{ij}\, x_{ij} \label{eq:tp-obj}\\
+  \text{s.t.} \quad
+  & \sum_{j=1}^{n} x_{ij} \leq s_i, && i = 1, \dots, m, \label{eq:tp-supply}\\
+  & \sum_{i=1}^{m} x_{ij} \geq d_j, && j = 1, \dots, n, \label{eq:tp-demand}\\
+  & x_{ij} \geq 0. && \label{eq:tp-nonneg}
+\end{align}
+Constraints~\eqref{eq:tp-supply} encode depot capacity and constraints~\eqref{eq:tp-demand} encode demand satisfaction. The model is intentionally parsimonious---its objective and constraints are all linear in the decision variables---because unit transportation costs are, to a good approximation, proportional to shipped quantities, and because this linearity is what makes an exact, globally optimal solution computable at industrial scale. Richer logistics settings retain this LP core: multi-commodity variants stack one such program per commodity and couple them through shared arc capacities \citep{dai2019mcf,brand2023mcf}, vehicle-routing formulations relax it through linear cut constraints \citep{munari2016vrp}, and fixed-charge or multimodal extensions build directly on its linear relaxation \citep{saraswathi2026support,su2025freight}.
+
+\subsection{Duality and Economic Interpretation}
+\label{sec:duality}
+
+Associating dual variables $u_i \leq 0$ with the supply constraints \eqref{eq:tp-supply} and $v_j \geq 0$ with the demand constraints \eqref{eq:tp-demand}, the dual of \eqref{eq:tp-obj}--\eqref{eq:tp-demand} is
+\begin{align}
+  \max_{u, v} \quad & \sum_{j=1}^{n} d_j v_j - \sum_{i=1}^{m} s_i u_i
+    \label{eq:tp-dual}\\
+  \text{s.t.} \quad & v_j - u_i \leq c_{ij}, \qquad i = 1,\dots,m,\; j = 1,\dots,n.
+    \nonumber
+\end{align}
+By strong duality, the optimal values of \eqref{eq:tp-obj} and \eqref{eq:tp-dual} coincide, and the complementary slackness conditions
+\begin{equation}
+  (v_j - u_i - c_{ij})\, x_{ij} = 0 \quad \forall\, i, j
+  \label{eq:compl-slack}
+\end{equation}
+characterize optimality. In logistics terms, the dual variables are \emph{shadow prices}: $u_i$ is the marginal value of one additional unit of capacity at depot $i$, and $v_j$ is the marginal cost of serving one additional unit of demand at retailer $j$. This interpretation is a principal reason exact LP methodology---as opposed to heuristics---is considered essential in transportation planning: the optimal basis simultaneously certifies a shipping plan and a consistent system of marginal prices for capacity contracting and what-if analysis.
+
+\subsection{Structure of the Transportation Polytope}
+\label{sec:polytope}
+
+The feasible region of \eqref{eq:tp-obj}--\eqref{eq:tp-demand} is the \emph{transportation polytope}. Three structural properties govern algorithmic behavior on it. First, its constraint matrix is totally unimodular, so when supplies and demands are integral every vertex is integral: the LP relaxation is exact and no integer-programming machinery is required. Second, when total supply equals total demand, constraints \eqref{eq:tp-supply}--\eqref{eq:tp-demand} are linearly dependent (any one constraint is implied by the rest), so every basic feasible solution has at most $m+n-1$ positive shipments; this rank deficiency makes the polytope \emph{prone to degeneracy}, a property examined in detail by \citet{im2022degeneracy}. Third, the constraint matrix is sparse---each variable $x_{ij}$ appears in exactly two constraints---so the polytope is an instance of a network-flow polytope, and algorithms that exploit graph structure (Section~\ref{sec:rw-structure}) can act directly on the underlying bipartite graph rather than on the $mn$-column tableau.
+
+These properties jointly define the computational landscape surveyed in Section~\ref{sec:related-works}: integrality guarantees exactness of the LP core; degeneracy stresses simplex-type implementations; and network sparsity is the lever that structure-exploiting algorithms pull.

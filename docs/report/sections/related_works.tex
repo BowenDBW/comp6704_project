@@ -1,0 +1,44 @@
+\section{Related Works}
+\label{sec:related-works}
+
+Research on solving transportation and logistics LPs can be organized into five methodological families: simplex-type algorithms (\S\ref{sec:rw-simplex}), interior-point methods (\S\ref{sec:rw-ipm}), first-order methods and GPU-accelerated solvers (\S\ref{sec:rw-fo}), structure-exploiting and decomposition approaches (\S\ref{sec:rw-structure}), and learning-augmented optimization (\S\ref{sec:rw-learning}). We survey each family in turn and conclude with the bottlenecks that delineate the current research frontier (\S\ref{sec:rw-gap}).
+
+\subsection{Simplex-Type Methods}
+\label{sec:rw-simplex}
+
+Dantzig's simplex method \citep{dantzig1951application} remains the algorithmic backbone of transportation planning. The revised and dual revised variants dominate modern implementations because they compress the tableau to a basis and permit sparse linear algebra; \citet{huangfu2015parallel} study the parallelization of the dual revised simplex method and identify pricing and basis update as the only phases amenable to concurrent execution. For transportation and network-flow problems specifically, the \emph{network simplex} method exploits the spanning-tree structure of optimal bases, replacing dense basis factorization with graph operations; implementations and extensions are studied for maximum flow \citep{watanabe2017network} and for budget-constrained minimum cost flow \citep{holzhauser2016network}. On the theoretical side, the worst-case exponential behavior of the simplex method is not representative of practical instances: \citet{cornelissen2015smoothed} establish smoothed polynomial bounds for the network simplex and the minimum-mean cycle canceling algorithm, providing the most convincing available explanation of its empirical efficiency. Industrial solvers such as HiGHS \citep{huangfu2018highs} still default to the dual simplex as the first algorithm attempted on LPs.
+
+\subsection{Interior-Point Methods}
+\label{sec:rw-ipm}
+
+Interior-point methods (IPMs), initiated by \citet{karmarkar1984new}, attain polynomial worst-case complexity by following the central path. Accessible derivations of the primal-dual path-following scheme are given by \citet{mehlhorn2015ipm}. Two research threads address the practical weaknesses of IPMs on large instances. First, the Newton system arising at each iteration becomes increasingly ill-conditioned as the iterate approaches the optimal face; \citet{cornelis2021regularized} prove convergence of a regularized inexact IPM in which the Newton equations are solved only approximately with a regularization term stabilizing the linear algebra. Second, a sequence of works seeks to remove the expensive direct factorization step: \citet{lin2018admm} propose an ADMM-based IPM in which the augmented system is handled by operator splitting rather than sparse Cholesky, trading per-iteration exactness for scalability. \citet{rothberg2026hybrid} revisit this trade-off from the opposite direction, showing that a first-order method can provide a warm-started, stabilized interior-point phase.
+
+\subsection{First-Order Methods and GPU-Accelerated Solvers}
+\label{sec:rw-fo}
+
+The most active recent line of work targets LP instances far beyond the reach of factorization-based methods. PDLP \citep{applegate2025pdlp} established primal-dual hybrid gradient (PDHG) with restart heuristics as a practical first-order LP solver at the million-variable scale; cuPDLP.x \citep{lu2025cupdlpx} demonstrated that a GPU implementation with preconditioning and scaling reaches solutions competitive with, and orders of magnitude faster than, commercial simplex and IPM codes on huge instances. Subsequent work scales the paradigm further along three axes: distribution across multi-GPU clusters \citep{li2026dpdlp}, presolving tailored to the numerical behavior of first-order iterations \citep{cederberg2026presolve}, and automatic parameter tuning with generalization guarantees \citep{prasad2026tuning}. This family trades exactness for parallelizability: solutions are certified only to a moderate tolerance, and tail convergence is slow.
+
+\subsection{Structure-Exploiting and Decomposition Methods}
+\label{sec:rw-structure}
+
+A complementary philosophy is to exploit the combinatorial or decomposable structure of logistics LPs rather than to accelerate generic solvers. For multi-commodity flow---the natural multi-depot generalization of the transportation problem---\citet{dai2019mcf} develop efficient LP formulations for the splitted variant, while \citet{brand2023mcf} obtain high-accuracy solutions by reduction to single-commodity subproblems. At the industrial scale of end-to-end supply chain planning, monolithic LP/IPP formulations become intractable and decomposition is indispensable: \citet{guan2026supplychain} combine column generation with Benders decomposition to solve enterprise-scale paper-industry planning, with the pricing subproblems constituting the computational crux. Relaxations that depart from pure network structure, such as fixed-charge network flow, require LP-based support identification to remain tractable \citep{saraswathi2026support}.
+
+\subsection{Learning-Augmented Optimization}
+\label{sec:rw-learning}
+
+A nascent direction applies machine learning not to replace exact solvers but to accelerate their inner loops. \citet{sul2026rl} train a reinforcement learning policy to select PDHG step sizes and restart decisions, accelerating first-order LP solving without sacrificing feasibility certificates, and \citet{prasad2026tuning} provide learning-theoretic guarantees for tuning GPU solver parameters on a distribution of instances. The common caveat is generalization: learned accelerators are only guaranteed on distributions resembling the training instances, which motivates the hybridization trend of \S\ref{sec:rw-ipm}--\S\ref{sec:rw-fo} as a more conservative alternative.
+
+\subsection{Problem-Specific Theory for Transportation}
+\label{sec:rw-tp}
+
+Beyond generic solver technology, the transportation problem itself continues to motivate specialized algorithms and theory. \citet{bargetto2023iterated} propose Iterated Inside Out, an exact algorithm that outperforms general-purpose LP solvers on classical transportation instances. \citet{nickel2026monge} characterize the problem under Monge cost structure, obtaining closed-form solutions that transfer to discrete ordered median problems. On the applied side, \citet{bai2024sinkhorn} compare Sinkhorn-type entropy-regularized schemes against exact LP solvers for partial optimal transport, quantifying the accuracy gap incurred by regularization. Finally, \citet{im2022degeneracy} develop the theory of degeneracy, strict feasibility, and stability in LP---directly relevant because transportation polytopes are a canonical source of highly degenerate instances.
+
+\subsection{Applications in Transport and Logistics}
+\label{sec:rw-applications}
+
+At the modeling level, \citet{bridgelall2022tutorial} provide a tutorial treatment of LP formulations across supply chain and transport logistics, and \citet{munari2016vrp} give a generalized formulation for vehicle routing that subsumes many LP relaxations in the literature. \citet{su2025freight} integrate buses and drones in a multimodal freight model for last-mile delivery, illustrating how the linear LP core is embedded in richer logistics decision problems.
+
+\subsection{Bottlenecks and Open Gaps}
+\label{sec:rw-gap}
+
+Three tensions emerge from this literature and jointly define the frontier. \emph{Accuracy versus scale}: simplex and IPM deliver machine-precision, vertex-certified solutions whose bases support the shadow-price analysis of Section~\ref{sec:duality}, but both are limited by factorization-based linear algebra; first-order methods scale to extreme sizes and parallelize naturally, yet terminate at moderate accuracies with slow tail convergence \citep{applegate2025pdlp,lu2025cupdlpx}. \emph{Genericity versus structure}: structure-exploiting algorithms are dramatically faster on pure network LPs but fragile once side constraints or fixed charges appear \citep{holzhauser2016network,saraswathi2026support}. \emph{Speed versus reliability in learning-augmented solvers}: learned components accelerate but lack distributional guarantees \citep{prasad2026tuning,sul2026rl}. The prevailing response is hybridization---combining first-order and interior-point phases \citep{rothberg2026hybrid,lin2018admm}---while degeneracy, endemic to transportation polytopes, remains a stressor for all vertex-traversing methods \citep{im2022degeneracy}. These observations directly motivate the experimental design of this project: transportation instances simultaneously exercise simplex degeneracy handling, IPM conditioning, and network structure, making them an informative benchmark for cross-family algorithm comparison.
