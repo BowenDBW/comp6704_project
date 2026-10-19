@@ -1,0 +1,4 @@
+# Preserve delivered bytes and SHA-256 manifests across platforms.
+/shared/** -text
+/dual_simplex/** -text
+/validation/** -text

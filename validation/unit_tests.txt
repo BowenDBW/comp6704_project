@@ -1,0 +1,11 @@
+test_hand_computed_capacity_pivot (test_dual_simplex.Tests.test_hand_computed_capacity_pivot) ... ok
+test_infeasible_not_reported_optimal (test_dual_simplex.Tests.test_infeasible_not_reported_optimal) ... ok
+test_limits_and_bad_inputs (test_dual_simplex.Tests.test_limits_and_bad_inputs) ... ok
+test_non_dual_feasible_warm_rejected (test_dual_simplex.Tests.test_non_dual_feasible_warm_rejected) ... ok
+test_random_small_and_warm_external_oracle (test_dual_simplex.Tests.test_random_small_and_warm_external_oracle) ... ok
+test_tied_costs_degeneracy_and_unchanged_warm (test_dual_simplex.Tests.test_tied_costs_degeneracy_and_unchanged_warm) ... ok
+
+----------------------------------------------------------------------
+Ran 6 tests in 0.105s
+
+OK

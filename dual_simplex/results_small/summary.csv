@@ -1,0 +1,4 @@
+case_id,mode,successful_runs,total_runs,median_runtime_seconds,iterations,base_runtime_seconds,initial_min_basic
+M03_N05_a030_seed2026_base,cold,10,10,0.0007191499971668236,8,,-6.362002359581652
+M03_N05_a030_seed2026_demand_perturbed,cold,10,10,0.0007033500005491078,8,,-6.4080976479132055
+M03_N05_a030_seed2026_demand_perturbed,warm,10,10,0.0003311500004201662,2,0.000680000004649628,-0.6849284281172601

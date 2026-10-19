@@ -1,0 +1,37 @@
+{
+  "status": "optimal",
+  "message": "Primal/dual feasibility and gap passed",
+  "iterations": 0,
+  "phase1_iterations": 0,
+  "phase2_iterations": 0,
+  "initialization": "copied basis indices only; no factorization reused",
+  "initial_min_basic": 0.8224909982545014,
+  "history": [
+    {
+      "iteration": 0,
+      "objective": 794.187478548287,
+      "primal_residual_inf": 3.552713678800501e-15,
+      "min_z": 0.0,
+      "dual_residual_inf": 0.0,
+      "min_dual_slack": -4.440892098500626e-16,
+      "relative_duality_gap": 1.4314861514742935e-16
+    }
+  ],
+  "options": {
+    "primal_tol": 1e-07,
+    "nonnegative_tol": 1e-08,
+    "dual_tol": 1e-07,
+    "gap_tol": 1e-07,
+    "pivot_tol": 1e-12,
+    "internal_dual_tol": 1e-09,
+    "max_iterations": 10000,
+    "time_limit": 120.0
+  },
+  "objective": 794.187478548287,
+  "primal_residual_inf": 3.552713678800501e-15,
+  "min_z": 0.0,
+  "dual_residual_inf": 0.0,
+  "min_dual_slack": -4.440892098500626e-16,
+  "relative_duality_gap": 1.4314861514742935e-16,
+  "runtime_seconds": 0.00022510000417241827
+}
