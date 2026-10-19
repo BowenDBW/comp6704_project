@@ -1,0 +1,17 @@
+{
+  "environment_id": "ENV_Windows_PY313_NP251",
+  "os": "Windows-11-10.0.26300-SP0",
+  "cpu": "AMD64 Family 26 Model 68 Stepping 0, AuthenticAMD",
+  "physical_cores_logical": 24,
+  "ram_total_gb": 46.9,
+  "python": "3.13.5",
+  "numpy": "2.5.1",
+  "scipy": "1.18.0",
+  "blas_summary": "Build Dependencies: blas: detection method: pkgconfig found: true include directory: C:/Users/runneradmin/AppData/Local/Temp/cibw-run-h1i__5an/cp313-win_amd64/build/venv/Lib/site-packages/scipy_openblas64/include lib directory: C:/Users/runneradmin/AppData/Local/Temp/cibw-run-h1i__5an/cp313-win_amd64/build/venv/Lib/site-packages/scipy_openblas64/lib name: scipy-openblas openblas configuration: Ope",
+  "thread_env": {
+    "OPENBLAS_NUM_THREADS": "1",
+    "OMP_NUM_THREADS": "1",
+    "MKL_NUM_THREADS": "1",
+    "NUMEXPR_NUM_THREADS": "1"
+  }
+}
