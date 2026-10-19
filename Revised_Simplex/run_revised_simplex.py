@@ -3,8 +3,8 @@
 Run: python -B run_revised_simplex.py
 The default benchmark directory is the sibling ../shared folder.
 Default: all 54 cases, one warm-up and ten measured cold starts per case.
-For a quick check, add --case-id M03_N05_a030_seed2026_base --repeats 1
---output-dir results_check. The default results CSV is replaced after completion.
+For the shared first case, add --small-only --output runs/revised_small.
+Use --repeats 1 for a faster check. The default results CSV is replaced after completion.
 """
 import argparse
 import csv
@@ -177,16 +177,23 @@ def _alpha_summary(records, cases):
 def main(argv=None):
     parser = argparse.ArgumentParser(description=__doc__)
     folder = Path(__file__).resolve().parent
-    # Optional override: python run_revised_simplex.py --benchmark-dir "/path/to/shared"
-    parser.add_argument("--benchmark-dir", type=Path,
+    # Short flags match the group runners; the original names still work.
+    parser.add_argument("--benchmark", "--benchmark-dir", dest="benchmark_dir", type=Path,
                         default=folder.parent / "shared")
-    parser.add_argument("--output-dir", type=Path, default=folder / "results")
+    parser.add_argument("--output", "--output-dir", dest="output_dir",
+                        type=Path, default=folder / "results")
     parser.add_argument("--case-id")
+    parser.add_argument("--small-only", action="store_true")
     parser.add_argument("--repeats", type=int, default=10)
     parser.add_argument("--max-iter", type=int, default=DEFAULT_OPTIONS["max_iter"])
     args = parser.parse_args(argv)
     if args.repeats < 1 or args.max_iter < 0:
         parser.error("repeats must be positive; max-iter must be nonnegative.")
+    if args.small_only:
+        first_case = "M03_N05_a030_seed2026_base"
+        if args.case_id is not None and args.case_id != first_case:
+            parser.error("--small-only cannot select a different --case-id.")
+        args.case_id = first_case
     given = args.benchmark_dir.resolve()
     if (given / "manifest.csv").is_file():
         data_dir = given

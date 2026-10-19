@@ -1,11 +1,11 @@
 # COMP6704：Capacitated Transportation LP 算法比较
 
-本仓库提供统一的运输 LP、已验证 benchmark，以及 Dual Simplex 和 Tableau Simplex 实现，供小组在相同输入及精度要求下比较四种算法。
+本仓库提供统一的运输 LP、已验证 benchmark，以及 Dual Simplex、Tableau Simplex 和 Revised Simplex 实现，供小组在相同输入及精度要求下比较四种算法。
 
 | 方法 | 本仓库当前状态 |
 |---|---|
 | Tableau Simplex | 已实现 Two-Phase Full-Tableau Simplex；54/54 实例、540/540 次计时通过 |
-| Revised Simplex | 等待负责人加入代码及结果 |
+| Revised Simplex | 已实现两阶段 Revised Simplex；54/54 个 cold-start 实例、540/540 次计时通过 |
 | Dual Simplex | 已实现并验证 cold-start 与 demand-perturbed warm-start |
 | Primal-Dual Interior-Point Method | 等待负责人加入代码及结果 |
 
@@ -17,6 +17,7 @@
 shared/                   完整共享模型、Generator、实例及 reference objectives
 dual_simplex/             算法、测试、runner、说明及原有全部实验结果
 tableau_simplex/          两阶段全表单纯形算法、测试、runner 及完整验证结果
+Revised_Simplex/          两阶段 Revised Simplex 求解器、runner、说明及 CSV 结果
 validation/               本上传包的小实例复跑结果与单元测试记录
 requirements.txt          根目录依赖安装入口
 runs/                     用户自行复跑的输出，Git 默认忽略
@@ -34,20 +35,22 @@ python -m unittest discover -s dual_simplex -p "test_dual_simplex.py" -v
 python -m unittest discover -s tableau_simplex -p "test_tableau_simplex.py" -v
 python dual_simplex/run_validation.py --benchmark shared --output runs/dual_small --small-only
 python tableau_simplex/run_benchmark.py --benchmark shared --output runs/tableau_small --small-only
+python Revised_Simplex/run_revised_simplex.py --benchmark shared --output runs/revised_small --small-only
 ```
 
-小实例包含 base cold、perturbed cold、perturbed warm 三种 case/mode，各 1 次 warmup 与 10 次计时，总计 30 次计时和 3 次 warmup。成功时输出 `all_pass: true`。
+Dual Simplex 的小实例包含 base cold、perturbed cold、perturbed warm 三种 case/mode，共 30 次计时和 3 次预热；Tableau 和 Revised Simplex 的 `--small-only` 各运行共同的首个 base 实例，默认 1 次预热和 10 次计时。Revised Simplex 也可加 `--repeats 1` 快速检查。
 
 运行完整 benchmark：
 
 ```bash
 python dual_simplex/run_validation.py --benchmark shared --output runs/dual_all
 python tableau_simplex/run_benchmark.py --benchmark shared --output runs/tableau_all
+python Revised_Simplex/run_revised_simplex.py --benchmark shared --output runs/revised_all
 ```
 
-完整验证包含 54 个 cold-start 与 27 个 warm-start case/mode。输出目录必须尚不存在；重复运行时换成 `runs/dual_small_02` 等新名字，避免覆盖既有记录。
+Dual Simplex 的完整验证包含 54 个 cold-start 与 27 个 warm-start case/mode；Tableau 和 Revised Simplex 各运行 54 个 cold-start 实例。Dual 和 Tableau runner 要求输出目录尚不存在；Revised runner 会覆盖同名 CSV。重复运行时都建议换新目录，以保留既有记录。
 
-runner 以线程池限制为 1 的方式运行并记录环境。计时包含输入复制、初始化、LU、pivot 和 trace 收集，排除磁盘 I/O 与外部 reference 检查。
+Dual Simplex runner 将线程池限制为 1；Revised Simplex runner 记录线程环境变量，但未测量实际线程数。Revised Simplex 已提交的计时来自 Python 3.12.12、NumPy 2.3.5，不能直接与其他成员的本地计时排名。正式比较需统一机器和线程设置；求解时间包含初始化与迭代，排除磁盘 I/O 和外部 reference 检查。
 
 ## 共同优化问题
 

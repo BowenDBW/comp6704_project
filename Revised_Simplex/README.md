@@ -18,7 +18,7 @@
 
 In `revised_simplex.py`, `solve(A, b, c_hat, {"M": M, "N": N})` checks and copies the inputs, starts the timer, and coordinates two phases. `_phase_one` adds temporary variables to the demand rows to find a feasible basis, then removes those variables. `_simplex` performs the same revised-simplex pivot loop in both phases: solve the current basis equations, calculate reduced costs, choose an entering column, apply the minimum-ratio test, and replace one basis column. Phase II uses the original transport costs. `_optimality` checks feasibility and dual conditions before an `optimal` status is accepted. The returned dictionary also contains the solution, basis, iteration counts, and an in-memory history.
 
-In `run_revised_simplex.py`, the default run loads the 54 supplied NPZ cases (27 base and 27 demand-perturbed). Each case has one warm-up and ten independent measured cold starts. The runner checks all six proposed v1 criteria, using the HiGHS reference objective only **after** each solve. It writes one row per measured run, case and alpha summaries, and three representative Phase II histories. A single case can be selected with `--case-id`; use a separate `--output-dir` so that this check does not replace the full results.
+In `run_revised_simplex.py`, the default run loads the 54 supplied NPZ cases (27 base and 27 demand-perturbed). Each case has one warm-up and ten independent measured cold starts. The runner checks all six proposed v1 criteria, using the HiGHS reference objective only **after** each solve. It writes one row per measured run, case and alpha summaries, and three representative Phase II histories. Use `--small-only` for the shared first case or `--case-id` for another case; choose a separate output folder to preserve the full results.
 
 ## Run
 
@@ -28,13 +28,14 @@ The runner reads the repository's sibling `shared/` folder by default. From `Rev
 python -B run_revised_simplex.py
 ```
 
-For one quick case check, keep its output separate:
+From the repository root, the same flags as the other group runners work:
 
 ```sh
-python -B run_revised_simplex.py --case-id M03_N05_a030_seed2026_base --repeats 1 --output-dir results_check
+python -B Revised_Simplex/run_revised_simplex.py --benchmark shared --output runs/revised_small --small-only
+python -B Revised_Simplex/run_revised_simplex.py --benchmark shared --output runs/revised_all
 ```
 
-The full run writes the result files listed above after all cases finish, replacing matching CSVs if they exist. The bundled run-level CSV came from the original local validation run. Its case and alpha summaries were calculated from those same rows without rerunning the solver; the three histories came from separate representative reruns. For group integration, import `solve` from `revised_simplex.py` and pass the shared `A`, `b`, `c_hat` arrays and integer `M`, `N`. Inputs are not modified; basis indices are zero-based. The internal settings are reduced-cost/direction tolerances of `1e-10`, Phase I tolerance of `1e-8`, and at most 10,000 pivots per phase.
+The first command runs one warm-up and ten measured cold starts for `M03_N05_a030_seed2026_base`; add `--repeats 1` for a faster check. The second runs all 54 cases. The original `--benchmark-dir` and `--output-dir` flags remain valid. A run replaces matching CSVs in its chosen output folder, so use a new folder to keep earlier results. The bundled run-level CSV came from the original local validation run. Its case and alpha summaries were calculated from those same rows without rerunning the solver; the three histories came from separate representative reruns. For group integration, import `solve` from `revised_simplex.py` and pass the shared `A`, `b`, `c_hat` arrays and integer `M`, `N`. Inputs are not modified; basis indices are zero-based. The internal settings are reduced-cost/direction tolerances of `1e-10`, Phase I tolerance of `1e-8`, and at most 10,000 pivots per phase.
 
 ## Results
 
