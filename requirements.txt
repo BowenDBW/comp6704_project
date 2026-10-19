@@ -1,1 +1,2 @@
 -r dual_simplex/requirements.txt
+-r tableau_simplex/requirements.txt

@@ -1,21 +1,22 @@
 # COMP6704：Capacitated Transportation LP 算法比较
 
-本仓库提供统一的运输 LP、已验证 benchmark 和 Dual Simplex 实现，供小组在相同输入及精度要求下比较四种算法。
+本仓库提供统一的运输 LP、已验证 benchmark，以及 Dual Simplex 和 Tableau Simplex 实现，供小组在相同输入及精度要求下比较四种算法。
 
 | 方法 | 本仓库当前状态 |
 |---|---|
-| Tableau Simplex | 等待负责人加入代码及结果 |
+| Tableau Simplex | 已实现 Two-Phase Full-Tableau Simplex；54/54 实例、540/540 次计时通过 |
 | Revised Simplex | 等待负责人加入代码及结果 |
 | Dual Simplex | 已实现并验证 cold-start 与 demand-perturbed warm-start |
 | Primal-Dual Interior-Point Method | 等待负责人加入代码及结果 |
 
-其他三种方法的实验结果尚未提供，不能据此给出四算法性能排名。共享 protocol 的原始文件保留 proposed 标记，小组确认后应记录确认日期和正式环境。
+尚未提供全部四种方法在同一环境下的实验结果，不能据此给出四算法性能排名。共享 protocol 的原始文件保留 proposed 标记，小组确认后应记录确认日期和正式环境。
 
 ## 目录
 
 ```text
 shared/                   完整共享模型、Generator、实例及 reference objectives
 dual_simplex/             算法、测试、runner、说明及原有全部实验结果
+tableau_simplex/          两阶段全表单纯形算法、测试、runner 及完整验证结果
 validation/               本上传包的小实例复跑结果与单元测试记录
 requirements.txt          根目录依赖安装入口
 runs/                     用户自行复跑的输出，Git 默认忽略
@@ -30,7 +31,9 @@ runs/                     用户自行复跑的输出，Git 默认忽略
 ```bash
 python -m pip install -r requirements.txt
 python -m unittest discover -s dual_simplex -p "test_dual_simplex.py" -v
+python -m unittest discover -s tableau_simplex -p "test_tableau_simplex.py" -v
 python dual_simplex/run_validation.py --benchmark shared --output runs/dual_small --small-only
+python tableau_simplex/run_benchmark.py --benchmark shared --output runs/tableau_small --small-only
 ```
 
 小实例包含 base cold、perturbed cold、perturbed warm 三种 case/mode，各 1 次 warmup 与 10 次计时，总计 30 次计时和 3 次 warmup。成功时输出 `all_pass: true`。
@@ -39,6 +42,7 @@ python dual_simplex/run_validation.py --benchmark shared --output runs/dual_smal
 
 ```bash
 python dual_simplex/run_validation.py --benchmark shared --output runs/dual_all
+python tableau_simplex/run_benchmark.py --benchmark shared --output runs/tableau_all
 ```
 
 完整验证包含 54 个 cold-start 与 27 个 warm-start case/mode。输出目录必须尚不存在；重复运行时换成 `runs/dual_small_02` 等新名字，避免覆盖既有记录。
@@ -125,9 +129,11 @@ print("perturbed cold / warm pivots:", cold["iterations"], warm["iterations"])
 
 已有全量验证记录为 54 cold + 27 warm case/mode，810 次计时及 81 次 warmup 全部通过。详见 [算法验证报告](dual_simplex/IMPLEMENTATION_VALIDATION_REPORT.md)。这些 runtime 来自本地环境，正式四方法时间比较仍需共同环境。
 
+Tableau Simplex 已完成 54 个 cold-start 实例、540 次计时及 54 次 warmup，全部通过精度检查。详见 [Tableau 验证报告](tableau_simplex/IMPLEMENTATION_VALIDATION_REPORT.md)。这些 runtime 同样仅作为本地验证结果。
+
 ## 小组协作与上传
 
-将本目录内部的文件与子目录上传到空 repository 根目录，确保 GitHub 首页能显示本 README。共享实例与 Generator 保持一致；其他算法建议使用独立目录 `tableau_simplex/`、`revised_simplex/`、`primal_dual_ipm/`，避免覆盖 `shared/`。
+共享实例与 Generator 保持一致；其他算法使用独立目录，例如 `revised_simplex/` 和 `primal_dual_ipm/`，避免覆盖 `shared/`。
 
 `.gitignore` 忽略缓存、虚拟环境和 `runs/`；已有验证结果保留追踪。浏览器上传时也不要选择本机复跑产生的 `runs/` 或缓存目录，浏览器不会替你按本地忽略规则筛选。无需上传分发 ZIP 本身。
 

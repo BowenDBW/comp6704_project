@@ -1,0 +1,17 @@
+{
+  "environment_id": "ENV_Windows_PY313_NP251",
+  "os": "Windows 11",
+  "cpu": "AMD64",
+  "physical_cores_logical": 16,
+  "ram_total_gb": 15.7,
+  "python": "3.13.0",
+  "numpy": "2.5.1",
+  "scipy": "1.18.0",
+  "blas_summary": "openblas 0.3.33.112.0 (pthreads)",
+  "thread_env": {
+    "OPENBLAS_NUM_THREADS": "1",
+    "OMP_NUM_THREADS": "1",
+    "MKL_NUM_THREADS": "1",
+    "NUMEXPR_NUM_THREADS": "1"
+  }
+}

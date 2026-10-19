@@ -1,0 +1,13 @@
+{
+  "algorithm": "Tableau Simplex",
+  "cases": 54,
+  "timed_runs": 540,
+  "warmup_runs": 54,
+  "failed": 0,
+  "warmups_failed": 0,
+  "all_pass": true,
+  "shared_files_unchanged": 125,
+  "max_primal_residual_inf": 3.552713678800501e-14,
+  "max_relative_objective_error": 5.889400576225532e-16,
+  "max_relative_duality_gap": 3.5406389032353505e-16
+}
