@@ -1,0 +1,14 @@
+{
+  "cases": 54,
+  "case_modes": 81,
+  "timed_runs": 810,
+  "warmup_runs": 81,
+  "failed": 0,
+  "warmups_failed": 0,
+  "all_pass": true,
+  "shared_files_unchanged": 125,
+  "max_primal_residual": 9.303668946358812e-14,
+  "max_relative_objective_error": 5.870092721947151e-16,
+  "max_relative_duality_gap": 3.449953747699705e-16,
+  "zero_pivot_warm_cases": 8
+}

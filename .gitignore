@@ -218,3 +218,31 @@ __marimo__/
 
 # Streamlit
 .streamlit/secrets.toml
+
+# Shared benchmark and Dual Simplex package
+# Python caches and tooling
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.coverage
+htmlcov/
+
+# Local environments and settings
+.venv/
+venv/
+env/
+.env
+.env.*
+.idea/
+.vscode/
+
+# New local reruns; delivered results remain tracked
+/runs/
+/dual_simplex/rerun_*/
+
+# OS files
+.DS_Store
+Thumbs.db
+Desktop.ini

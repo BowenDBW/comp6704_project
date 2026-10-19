@@ -1,0 +1,1 @@
+protocol_version,case_id,algorithm,mode,repeat_id,status,objective,primal_residual_inf,min_z,dual_residual_inf,min_dual_slack,relative_duality_gap,relative_objective_error,iterations,phase1_iterations,phase2_iterations,runtime_seconds,base_runtime_seconds,environment_id,options_id,message

@@ -1,0 +1,109 @@
+{
+  "status": "optimal",
+  "message": "Primal/dual feasibility and gap passed",
+  "iterations": 6,
+  "phase1_iterations": 0,
+  "phase2_iterations": 6,
+  "initialization": "cheapest route per customer plus all slacks",
+  "initial_min_basic": -16.969762233210858,
+  "history": [
+    {
+      "iteration": 0,
+      "objective": 276.8710611695782,
+      "primal_residual_inf": 1.7763568394002505e-15,
+      "min_z": -16.969762233210858,
+      "dual_residual_inf": 1.7763568394002505e-15,
+      "min_dual_slack": 0.0,
+      "relative_duality_gap": 0.0,
+      "leaving_column": 15,
+      "entering_column": 14,
+      "pivot": -1.0
+    },
+    {
+      "iteration": 1,
+      "objective": 278.64932351918395,
+      "primal_residual_inf": 0.0,
+      "min_z": -11.210845423918586,
+      "dual_residual_inf": 1.7763568394002505e-15,
+      "min_dual_slack": 0.0,
+      "relative_duality_gap": 0.0,
+      "leaving_column": 20,
+      "entering_column": 12,
+      "pivot": -1.0
+    },
+    {
+      "iteration": 2,
+      "objective": 369.0878545400183,
+      "primal_residual_inf": 1.7763568394002505e-15,
+      "min_z": -13.715407683533105,
+      "dual_residual_inf": 1.7763568394002505e-15,
+      "min_dual_slack": 0.0,
+      "relative_duality_gap": 0.0,
+      "leaving_column": 22,
+      "entering_column": 15,
+      "pivot": -1.0
+    },
+    {
+      "iteration": 3,
+      "objective": 370.79423878432505,
+      "primal_residual_inf": 0.0,
+      "min_z": -11.210845423918586,
+      "dual_residual_inf": 1.7763568394002505e-15,
+      "min_dual_slack": 0.0,
+      "relative_duality_gap": 1.5330178550554927e-16,
+      "leaving_column": 23,
+      "entering_column": 10,
+      "pivot": -1.0
+    },
+    {
+      "iteration": 4,
+      "objective": 470.48854688689914,
+      "primal_residual_inf": 7.105427357601002e-15,
+      "min_z": -8.062948241432975,
+      "dual_residual_inf": 0.0,
+      "min_dual_slack": 0.0,
+      "relative_duality_gap": 0.0,
+      "leaving_column": 17,
+      "entering_column": 3,
+      "pivot": -1.0
+    },
+    {
+      "iteration": 5,
+      "objective": 481.2217843307109,
+      "primal_residual_inf": 7.105427357601002e-15,
+      "min_z": -4.758129812298919,
+      "dual_residual_inf": 0.0,
+      "min_dual_slack": 0.0,
+      "relative_duality_gap": 1.1812312058953552e-16,
+      "leaving_column": 24,
+      "entering_column": 1,
+      "pivot": -1.0
+    },
+    {
+      "iteration": 6,
+      "objective": 520.4759713596577,
+      "primal_residual_inf": 8.881784197001252e-16,
+      "min_z": 0.0,
+      "dual_residual_inf": 0.0,
+      "min_dual_slack": 0.0,
+      "relative_duality_gap": 0.0
+    }
+  ],
+  "options": {
+    "primal_tol": 1e-07,
+    "nonnegative_tol": 1e-08,
+    "dual_tol": 1e-07,
+    "gap_tol": 1e-07,
+    "pivot_tol": 1e-12,
+    "internal_dual_tol": 1e-09,
+    "max_iterations": 10000,
+    "time_limit": 120.0
+  },
+  "objective": 520.4759713596577,
+  "primal_residual_inf": 8.881784197001252e-16,
+  "min_z": 0.0,
+  "dual_residual_inf": 0.0,
+  "min_dual_slack": 0.0,
+  "relative_duality_gap": 0.0,
+  "runtime_seconds": 0.0006716999996569939
+}

@@ -1,0 +1,97 @@
+{
+  "status": "optimal",
+  "message": "Primal/dual feasibility and gap passed",
+  "iterations": 5,
+  "phase1_iterations": 0,
+  "phase2_iterations": 5,
+  "initialization": "copied basis indices only; no factorization reused",
+  "initial_min_basic": -0.4670792091022147,
+  "history": [
+    {
+      "iteration": 0,
+      "objective": 2334.3768026624907,
+      "primal_residual_inf": 1.9539925233402755e-14,
+      "min_z": -0.4670792091022147,
+      "dual_residual_inf": 0.0,
+      "min_dual_slack": -7.993605777301127e-15,
+      "relative_duality_gap": 1.9480460496685822e-16,
+      "leaving_column": 90,
+      "entering_column": 220,
+      "pivot": -1.0
+    },
+    {
+      "iteration": 1,
+      "objective": 2334.7092488954922,
+      "primal_residual_inf": 2.1316282072803006e-14,
+      "min_z": -0.4670792091022147,
+      "dual_residual_inf": 0.0,
+      "min_dual_slack": -7.993605777301127e-15,
+      "relative_duality_gap": 1.9477686615650174e-16,
+      "leaving_column": 99,
+      "entering_column": 289,
+      "pivot": -1.0
+    },
+    {
+      "iteration": 2,
+      "objective": 2334.7456769273517,
+      "primal_residual_inf": 2.0872192862952943e-14,
+      "min_z": -0.4670792091022147,
+      "dual_residual_inf": 0.0,
+      "min_dual_slack": -8.881784197001252e-15,
+      "relative_duality_gap": 1.9477382713689638e-16,
+      "leaving_column": 304,
+      "entering_column": 34,
+      "pivot": -1.0
+    },
+    {
+      "iteration": 3,
+      "objective": 2335.0606927297476,
+      "primal_residual_inf": 2.398081733190338e-14,
+      "min_z": -0.4273736737859526,
+      "dual_residual_inf": 0.0,
+      "min_dual_slack": -1.0658141036401503e-14,
+      "relative_duality_gap": 0.0,
+      "leaving_column": 42,
+      "entering_column": 99,
+      "pivot": -1.0
+    },
+    {
+      "iteration": 4,
+      "objective": 2335.0846650774774,
+      "primal_residual_inf": 2.398081733190338e-14,
+      "min_z": -0.4273736737859526,
+      "dual_residual_inf": 0.0,
+      "min_dual_slack": -8.881784197001252e-15,
+      "relative_duality_gap": 0.0,
+      "leaving_column": 346,
+      "entering_column": 76,
+      "pivot": -1.0
+    },
+    {
+      "iteration": 5,
+      "objective": 2335.9518886435044,
+      "primal_residual_inf": 2.398081733190338e-14,
+      "min_z": 0.0,
+      "dual_residual_inf": 0.0,
+      "min_dual_slack": -7.105427357601002e-15,
+      "relative_duality_gap": 0.0
+    }
+  ],
+  "options": {
+    "primal_tol": 1e-07,
+    "nonnegative_tol": 1e-08,
+    "dual_tol": 1e-07,
+    "gap_tol": 1e-07,
+    "pivot_tol": 1e-12,
+    "internal_dual_tol": 1e-09,
+    "max_iterations": 10000,
+    "time_limit": 120.0
+  },
+  "objective": 2335.9518886435044,
+  "primal_residual_inf": 2.398081733190338e-14,
+  "min_z": 0.0,
+  "dual_residual_inf": 0.0,
+  "min_dual_slack": -7.105427357601002e-15,
+  "relative_duality_gap": 0.0,
+  "runtime_seconds": 0.002628900001582224
+}

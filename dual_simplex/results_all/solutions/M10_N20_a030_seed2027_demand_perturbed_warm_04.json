@@ -1,0 +1,61 @@
+{
+  "status": "optimal",
+  "message": "Primal/dual feasibility and gap passed",
+  "iterations": 2,
+  "phase1_iterations": 0,
+  "phase2_iterations": 2,
+  "initialization": "copied basis indices only; no factorization reused",
+  "initial_min_basic": -1.1397555077243542,
+  "history": [
+    {
+      "iteration": 0,
+      "objective": 2429.403093058104,
+      "primal_residual_inf": 3.108624468950438e-14,
+      "min_z": -1.1397555077243542,
+      "dual_residual_inf": 0.0,
+      "min_dual_slack": -5.329070518200751e-15,
+      "relative_duality_gap": 1.8718480773564568e-16,
+      "leaving_column": 28,
+      "entering_column": 298,
+      "pivot": -1.0
+    },
+    {
+      "iteration": 1,
+      "objective": 2431.021921305359,
+      "primal_residual_inf": 2.6645352591003757e-14,
+      "min_z": -1.1397555077243542,
+      "dual_residual_inf": 0.0,
+      "min_dual_slack": -5.329070518200751e-15,
+      "relative_duality_gap": 3.741203210889053e-16,
+      "leaving_column": 255,
+      "entering_column": 47,
+      "pivot": -1.0
+    },
+    {
+      "iteration": 2,
+      "objective": 2431.1115179106655,
+      "primal_residual_inf": 1.4210854715202004e-14,
+      "min_z": 0.0,
+      "dual_residual_inf": 0.0,
+      "min_dual_slack": -5.329070518200751e-15,
+      "relative_duality_gap": 0.0
+    }
+  ],
+  "options": {
+    "primal_tol": 1e-07,
+    "nonnegative_tol": 1e-08,
+    "dual_tol": 1e-07,
+    "gap_tol": 1e-07,
+    "pivot_tol": 1e-12,
+    "internal_dual_tol": 1e-09,
+    "max_iterations": 10000,
+    "time_limit": 120.0
+  },
+  "objective": 2431.1115179106655,
+  "primal_residual_inf": 1.4210854715202004e-14,
+  "min_z": 0.0,
+  "dual_residual_inf": 0.0,
+  "min_dual_slack": -5.329070518200751e-15,
+  "relative_duality_gap": 0.0,
+  "runtime_seconds": 0.002452599997923244
+}
