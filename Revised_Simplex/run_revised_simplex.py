@@ -1,4 +1,4 @@
-"""Run the released benchmark and save one CSV file.
+"""Run the released benchmark and save results and comparison summaries.
 
 Run: python -B run_revised_simplex.py
 The default benchmark directory is the sibling ../shared folder.
@@ -15,6 +15,12 @@ import platform
 import statistics
 import numpy as np
 from revised_simplex import ACCEPTANCE, DEFAULT_OPTIONS, solve
+
+HISTORY_CASE_IDS = {
+    "M03_N05_a030_seed2026_base",
+    "M10_N20_a090_seed2028_base",
+    "M10_N20_a090_seed2028_demand_perturbed",
+}
 
 # Summarize the timestamp and reported environment settings in one CSV field.
 def _environment_id():
@@ -97,7 +103,77 @@ def _case_order(row):
             int(row["seed"]), row["kind"] != "base")
 
 
-# Load cases, run repeated cold starts, validate results, and write the CSV.
+# Reduce repeated runs to one comparison row per case.
+def _case_summary(records):
+    """Summarize successful timings and all available accuracy checks by case."""
+    groups = {}
+    for record in records:
+        groups.setdefault(record["case_id"], []).append(record)
+
+    summaries = []
+    for case_id, rows in groups.items():
+        successful = [row for row in rows if row["status"] == "optimal"]
+        times = [float(row["runtime_seconds"]) for row in successful]
+        summary = {
+            "case_id": case_id,
+            "successful_runs": len(successful),
+            "total_runs": len(rows),
+            "median_runtime_seconds": statistics.median(times) if times else None,
+            "runtime_iqr_seconds": None,
+        }
+        if len(times) >= 2:
+            q1, _, q3 = statistics.quantiles(times, n=4, method="inclusive")
+            summary["runtime_iqr_seconds"] = q3 - q1
+        for name in ["iterations", "phase1_iterations", "phase2_iterations"]:
+            values = [int(row[name]) for row in successful if row[name] not in (None, "")]
+            summary[name] = statistics.median(values) if values else None
+        for name in ["primal_residual_inf", "relative_objective_error"]:
+            values = [float(row[name]) for row in rows if row[name] not in (None, "")]
+            summary["max_" + name] = max(values) if values else None
+        summaries.append(summary)
+    return summaries
+
+
+def _alpha_summary(records, cases):
+    """Compare objective values for matched cases as capacity tightens."""
+    runs = {}
+    for record in records:
+        runs.setdefault(record["case_id"], []).append(record)
+
+    objectives = {}
+    groups = {}
+    matched = {}
+    for case in cases:
+        case_id = case["case_id"]
+        good = [float(row["objective"]) for row in runs[case_id]
+                if row["status"] == "optimal" and row["objective"] not in (None, "")]
+        objectives[case_id] = statistics.median(good) if good else None
+        size_alpha = (int(case["M"]), int(case["N"]), float(case["alpha"]))
+        groups.setdefault(size_alpha, []).append(case)
+        pair = (int(case["M"]), int(case["N"]), case["seed"], case["kind"], float(case["alpha"]))
+        matched[pair] = case_id
+
+    summaries = []
+    for (M, N, alpha), group in sorted(groups.items()):
+        values = [objectives[case["case_id"]] for case in group
+                  if objectives[case["case_id"]] is not None]
+        changes = []
+        for case in group:
+            baseline_id = matched.get((M, N, case["seed"], case["kind"], 0.3))
+            current = objectives[case["case_id"]]
+            baseline = objectives.get(baseline_id)
+            if current is not None and baseline is not None:
+                changes.append((current - baseline) / max(1.0, abs(baseline)))
+        summaries.append({
+            "M": M, "N": N, "alpha": alpha, "cases": len(group),
+            "successful_cases": len(values), "paired_cases": len(changes),
+            "median_objective": statistics.median(values) if values else None,
+            "median_relative_change_from_alpha_0_3": statistics.median(changes) if changes else None,
+        })
+    return summaries
+
+
+# Load cases, run repeated cold starts, validate results, and write result files.
 def main(argv=None):
     parser = argparse.ArgumentParser(description=__doc__)
     folder = Path(__file__).resolve().parent
@@ -144,6 +220,7 @@ def main(argv=None):
     print("Environment: " + environment_id, flush=True)
     print("Settings: " + options_id + "; protocol=v1 (proposed)", flush=True)
     records = []
+    histories = {}
     passed_cases = 0
     measured_successes = 0
     warmup_successes = 0
@@ -185,6 +262,16 @@ def main(argv=None):
                 else:
                     print(f"Warm-up failed: {case_id}: {status}: {message}", flush=True)
                 continue
+            if repeat == 1 and case_id in HISTORY_CASE_IDS:
+                histories[case_id] = []
+                for point in result["history"]:
+                    if point["phase"] == 2 and point["event"] == "iterate":
+                        objective = point["objective"]
+                        histories[case_id].append({
+                            "phase": "phase2", "iteration": point["iteration"],
+                            "objective": objective,
+                            "relative_objective_gap": abs(objective - reference) / max(1.0, abs(reference)),
+                        })
             if passed:
                 successes += 1
                 measured_successes += 1
@@ -221,7 +308,32 @@ def main(argv=None):
         writer = csv.DictWriter(file, fieldnames=fields)
         writer.writeheader()
         writer.writerows(records)
-    print(f"Summary: {passed_cases}/{len(cases)} cases passed. Results: {output_file}", flush=True)
+    summary_file = output_dir / "case_summary.csv"
+    summary_fields = ["case_id", "successful_runs", "total_runs",
+                      "median_runtime_seconds", "runtime_iqr_seconds", "iterations", "phase1_iterations",
+                      "phase2_iterations", "max_primal_residual_inf",
+                      "max_relative_objective_error"]
+    with summary_file.open("w", newline="", encoding="utf-8") as file:
+        writer = csv.DictWriter(file, fieldnames=summary_fields)
+        writer.writeheader()
+        writer.writerows(_case_summary(records))
+    alpha_file = output_dir / "alpha_summary.csv"
+    alpha_fields = ["M", "N", "alpha", "cases", "successful_cases", "paired_cases",
+                    "median_objective", "median_relative_change_from_alpha_0_3"]
+    with alpha_file.open("w", newline="", encoding="utf-8") as file:
+        writer = csv.DictWriter(file, fieldnames=alpha_fields)
+        writer.writeheader()
+        writer.writerows(_alpha_summary(records, cases))
+    if histories:
+        history_dir = output_dir / "history"
+        history_dir.mkdir(exist_ok=True)
+        for case_id, points in histories.items():
+            with (history_dir / f"{case_id}_history.csv").open("w", newline="", encoding="utf-8") as file:
+                writer = csv.DictWriter(file, fieldnames=["phase", "iteration", "objective",
+                                                          "relative_objective_gap"])
+                writer.writeheader()
+                writer.writerows(points)
+    print(f"Summary: {passed_cases}/{len(cases)} cases passed. Results: {output_file}; {summary_file}; {alpha_file}; {len(histories)} histories", flush=True)
     print(f"Measured: {measured_successes}/{len(records)}; warm-ups: {warmup_successes}/{len(cases)}.")
     full_protocol = (args.case_id is None and base_count == 27 and perturbed_count == 27
                      and args.repeats == 10 and passed_cases == 54)
