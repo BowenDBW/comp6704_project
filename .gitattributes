@@ -4,9 +4,9 @@
 /validation/** -text
 /recorded_results/** -text
 /benchmark/** -text
-/Revised_Simplex/revised_simplex.py -text
+/Revised_Simplex/revised_simplex.py -text whitespace=cr-at-eol
 /tableau_simplex/tableau_simplex.py -text whitespace=cr-at-eol
-/algorithm_ipm/ipm_solver.py -text
+/algorithm_ipm/ipm_solver.py -text whitespace=cr-at-eol
 /MANIFEST.json -text
 /README.md -text
 /requirements.txt -text
