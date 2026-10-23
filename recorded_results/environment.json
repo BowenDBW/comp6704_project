@@ -1,0 +1,82 @@
+{
+  "python": "3.11.15 | packaged by Anaconda, Inc. | (main, Jun 11 2026, 15:12:53) [MSC v.1942 64 bit (AMD64)]",
+  "executable": "E:\\anaconda\\python.exe",
+  "numpy": "1.26.4",
+  "scipy": "1.11.4",
+  "os": "Windows-10-10.0.26200-SP0",
+  "cpu": "Intel64 Family 6 Model 151 Stepping 2, GenuineIntel",
+  "logical_cpus": 20,
+  "threadpools": [
+    {
+      "filepath": "E:\\anaconda\\Library\\bin\\mkl_rt.2.dll",
+      "prefix": "mkl_rt",
+      "user_api": "blas",
+      "internal_api": "mkl",
+      "version": "2023.1-Product",
+      "num_threads": 1,
+      "threading_layer": "intel"
+    },
+    {
+      "filepath": "E:\\anaconda\\Library\\bin\\libiomp5md.dll",
+      "prefix": "libiomp",
+      "user_api": "openmp",
+      "internal_api": "openmp",
+      "version": null,
+      "num_threads": 1
+    }
+  ],
+  "limits": {
+    "primal_residual_inf": 1e-07,
+    "min_z": -1e-08,
+    "dual_residual_inf": 1e-07,
+    "min_dual_slack": -1e-07,
+    "relative_duality_gap": 1e-07,
+    "relative_objective_error": 1e-07
+  },
+  "timing": "External perf_counter around entire solver invocation; excludes input I/O, external validation and output I/O. Solver defaults unchanged. Serial, rotating algorithm order per case/repeat. One warmup (repeat 0) then 10 measured runs.",
+  "options": {
+    "Tableau": {
+      "tol": 1e-09,
+      "max_iter": 10000,
+      "pivot_rule": "most_negative"
+    },
+    "Revised": {
+      "reduced_cost_tol": 1e-10,
+      "direction_tol": 1e-10,
+      "phase1_tol": 1e-08,
+      "max_iter": 10000
+    },
+    "Dual": {
+      "primal_tol": 1e-07,
+      "nonnegative_tol": 1e-08,
+      "dual_tol": 1e-07,
+      "gap_tol": 1e-07,
+      "pivot_tol": 1e-12,
+      "internal_dual_tol": 1e-09,
+      "max_iterations": 10000,
+      "time_limit": 120.0
+    },
+    "IPM": {
+      "primal_abs_tol": 1e-09,
+      "dual_abs_tol": 1e-09,
+      "gap_rel_tol": 1e-09,
+      "max_iterations": 100,
+      "tau_base": 0.995,
+      "tau_max": 0.9995,
+      "reg_levels": [
+        0.0,
+        1e-12,
+        1e-10,
+        1e-08,
+        1e-06
+      ],
+      "refine_steps": 1,
+      "verbose": false
+    }
+  },
+  "warm_start": "Retain first measured Dual base optimal basis; no LU reuse; each warm invocation copies basis inside solver; paired perturbation; base time reported separately.",
+  "cpu_model": "12th Gen Intel(R) Core(TM) i7-12700",
+  "cpu_model_source": "Windows hardware registry ProcessorNameString",
+  "source_repository": "https://github.com/BowenDBW/comp6704_project",
+  "source_commit": "d3b0b1f23a956c0491d7480fbafc14927398f74f"
+}

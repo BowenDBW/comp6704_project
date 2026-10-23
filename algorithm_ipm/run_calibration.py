@@ -4,7 +4,7 @@ Usage:  python -X utf8 run_calibration.py
 
 Checks (protocol): A=(23,33), b length 23, c_hat length 33, then runs the
 solver and prints the common acceptance metrics. Also writes the full
-per-iteration convergence history to results/history/ for the group report.
+per-iteration convergence history to runs/ipm_calibration/history/.
 """
 
 from __future__ import annotations
@@ -18,7 +18,7 @@ import numpy as np
 from ipm_solver import IPMOptions, protocol_metrics, solve_ipm
 
 HERE = pathlib.Path(__file__).resolve().parent
-BENCH = HERE.parent / "COMP6704_Benchmark_v1_validated"
+BENCH = HERE.parent / "shared"
 CASE = "M03_N05_a030_seed2026_base"
 
 
@@ -49,7 +49,7 @@ def main() -> None:
     print(f"HiGHS f_ref            : {f_ref!r}")
     print(f"relative_objective_err : {err:.6e}   (<=1e-7)")
 
-    hist_dir = HERE / "results" / "history"
+    hist_dir = HERE.parent / "runs" / "ipm_calibration" / "history"
     hist_dir.mkdir(parents=True, exist_ok=True)
     out = hist_dir / f"{CASE}_history.csv"
     fieldnames: list[str] = []
@@ -61,7 +61,7 @@ def main() -> None:
         w = csv.DictWriter(f, fieldnames=fieldnames)
         w.writeheader()
         w.writerows(res.history)
-    print(f"convergence history    : {out.relative_to(HERE)}")
+    print(f"convergence history    : {out.relative_to(HERE.parent)}")
 
     ok = (res.status == "optimal"
           and m["primal_residual_inf"] <= 1e-7 and m["min_z"] >= -1e-8

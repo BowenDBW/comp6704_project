@@ -1,0 +1,25 @@
+{
+  "rows": 2673,
+  "measured": 2430,
+  "failed": 0,
+  "inputs_and_solver_sources_unchanged": true,
+  "threadpools_end": [
+    {
+      "filepath": "E:\\anaconda\\Library\\bin\\mkl_rt.2.dll",
+      "prefix": "mkl_rt",
+      "user_api": "blas",
+      "internal_api": "mkl",
+      "version": "2023.1-Product",
+      "num_threads": 1,
+      "threading_layer": "intel"
+    },
+    {
+      "filepath": "E:\\anaconda\\Library\\bin\\libiomp5md.dll",
+      "prefix": "libiomp",
+      "user_api": "openmp",
+      "internal_api": "openmp",
+      "version": null,
+      "num_threads": 1
+    }
+  ]
+}

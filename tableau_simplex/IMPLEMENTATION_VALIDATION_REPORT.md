@@ -1,6 +1,6 @@
 # Tableau Simplex Implementation Validation Report
 
-Date: 2026-10-19. Status: implementation validation PASS under proposed v1
+Date: 2026-10-19. Status: implementation validation PASS under shared
 acceptance thresholds. The shared benchmark and generator were not modified.
 
 ## Implementation

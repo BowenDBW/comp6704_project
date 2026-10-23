@@ -1,143 +1,174 @@
-# COMP6704：Capacitated Transportation LP 算法比较
+# Capacitated Transportation: Comparison of Four LP Methods
 
-本仓库提供统一的运输 LP、已验证 benchmark，以及 Dual Simplex、Tableau Simplex 和 Revised Simplex 实现，供小组在相同输入及精度要求下比较四种算法。
+COMP6704 group project comparing two-phase tableau simplex, revised simplex,
+dual simplex, and Mehrotra's primal-dual interior-point method. All four solvers
+minimize transportation cost subject to warehouse supply limits, customer demand
+equalities, and route capacities.
 
-| 方法 | 本仓库当前状态 |
-|---|---|
-| Tableau Simplex | 已实现 Two-Phase Full-Tableau Simplex；54/54 实例、540/540 次计时通过 |
-| Revised Simplex | 已实现两阶段 Revised Simplex；54/54 个 cold-start 实例、540/540 次计时通过 |
-| Dual Simplex | 已实现并验证 cold-start 与 demand-perturbed warm-start |
-| Primal-Dual Interior-Point Method | 等待负责人加入代码及结果 |
+The report uses the common-machine measurements in `recorded_results/`.
+The numerical inputs and solver implementations correspond to revision
+`d3b0b1f23a956c0491d7480fbafc14927398f74f`.
 
-尚未提供全部四种方法在同一环境下的实验结果，不能据此给出四算法性能排名。共享 protocol 的原始文件保留 proposed 标记，小组确认后应记录确认日期和正式环境。
+## Installation
 
-## 目录
-
-```text
-shared/                   完整共享模型、Generator、实例及 reference objectives
-dual_simplex/             算法、测试、runner、说明及原有全部实验结果
-tableau_simplex/          两阶段全表单纯形算法、测试、runner 及完整验证结果
-Revised_Simplex/          两阶段 Revised Simplex 求解器、runner、说明及 CSV 结果
-validation/               本上传包的小实例复跑结果与单元测试记录
-requirements.txt          根目录依赖安装入口
-runs/                     用户自行复跑的输出，Git 默认忽略
-```
-
-`dual_simplex/results_small/` 和 `dual_simplex/results_all/` 保留原验证结果及逐次解/轨迹；`validation/small/` 是本上传目录中新执行的小实例验证。不同批次的 runtime 可能不同，不能混作同一批测量。
-
-## 快速运行
-
-使用 Python 3.11；原验证环境为 Python 3.11.15、NumPy 1.26.4、SciPy 1.11.4。在仓库根目录运行：
+Use Python 3.11 and run the following commands in a terminal:
 
 ```bash
+git clone https://github.com/BowenDBW/comp6704_project.git
+cd comp6704_project
 python -m pip install -r requirements.txt
+```
+
+The recorded environment is Python 3.11.15, NumPy 1.26.4, SciPy 1.11.4, and
+Intel Core i7-12700 on Windows, using MKL 2023.1. The runner restricts numerical
+thread pools to one thread and saves the actual environment and solver options.
+Runtime depends on hardware, BLAS implementation, and system load; new timings
+need not equal the archived measurements.
+
+## Reproduce the experiments
+
+Run the complete benchmark, verify every saved solution, and generate the
+summary tables and comparison figures:
+
+```bash
+python -X utf8 benchmark/reproduce.py --output runs/reproduction
+```
+
+The output directory must not already exist. Use a different `--output` path
+for another run. The command executes 2,160 measured cold starts, 270 measured
+dual warm starts, and 243 untimed warmups. A failed acceptance check produces a
+nonzero exit status. The complete run takes several minutes on the recorded
+machine.
+
+The two numerical stages can also be run separately:
+
+```bash
+python -X utf8 benchmark/run_unified.py --output runs/reproduction
+python -X utf8 benchmark/summarize_unified.py --input runs/reproduction
+python benchmark/plot_report.py --input runs/reproduction --output runs/reproduction/figures
+```
+
+`summarize_unified.py` independently recomputes the six acceptance metrics from
+each saved solution and the original input arrays. The generated files are:
+
+| File | Contents |
+|---|---|
+| `runs_including_warmups.csv` | All 2,673 solver calls, including repeat 0 warmups |
+| `measured_runs.csv` | The 2,430 measured calls |
+| `case_summary.csv` | Median runtime and iteration count for each case, method, and mode |
+| `accuracy_summary.csv` | Success counts and worst errors for the four cold-start methods |
+| `size_summary.csv` | Runtime medians, quartiles, and step counts by method and size |
+| `warm_start_summary.csv` | Paired speedups, mean pivot counts, reductions, and zero-pivot counts |
+| `solutions/` | One NPZ containing `z`, `y`, `r`, and available basis indices per measured call |
+| `environment.json` | Runtime, numerical libraries, thread pools, tolerances, and options |
+| `completion.json`, `independent_replay.json` | Run completion and solution verification counts |
+| `figures/` | Runtime, iterations, accuracy, basis reuse, and report comparison figures |
+
+## Verify the reported results
+
+The archived measurements and all 2,430 saved solutions are included. A quick
+check requires only the Python standard library:
+
+```bash
+python benchmark/verify_recorded_results.py
+```
+
+The checker verifies the file manifest, numerical input and solver hashes,
+run coverage, recorded acceptance metrics, reference-objective errors, and all
+reported table values. Add `--json` for the recalculated quartiles and paired
+pivot statistics. The quick check does not run the solvers or reconstruct
+residuals from solution vectors.
+
+To replay every archived solution and regenerate the tables and figures from
+the recorded measurements:
+
+```bash
+python -X utf8 benchmark/summarize_unified.py --input recorded_results --output runs/recorded_summary
+python benchmark/plot_report.py --input runs/recorded_summary --output runs/recorded_summary/figures
+```
+
+The report's accuracy, step-count, runtime, and basis-reuse tables correspond to
+`accuracy_summary.csv`, `size_summary.csv`, and `warm_start_summary.csv`, respectively.
+The two-panel report figure is `figures/comparison_overview.pdf`.
+
+## Experimental protocol
+
+- Sizes: 3 by 5, 5 by 10, and 10 by 20 warehouses and customers.
+- Each size has three capacity levels, three seeds (2026, 2027, 2028), and
+  original or perturbed demands: 18 instances per size, 54 in total.
+- Route capacity is `(3 - 2*alpha) * x_ref`, with `alpha` equal to 0.3, 0.6,
+  or 0.9. Each customer's demand perturbation is independently uniform within
+  plus or minus 5%. Within a base/perturbed pair, only the demand RHS changes.
+- Each method receives one warmup and ten measured cold solves per instance.
+  Method order rotates by instance and repetition. Timing covers the complete
+  solver call, including initialization, and excludes input loading and external
+  verification.
+- Runtime is first summarized by the median of ten repeats per instance, then
+  by the median across the 18 instances at each size. Q1 and Q3 use linear
+  interpolation across those 18 instance medians.
+- Dual warm starts reuse the basis from the first measured base solve.
+  Every repetition starts from a separate copy of that basis. Factorization
+  and updated RHS calculations are timed; the earlier base solve is excluded.
+- Warm speedup is the median of nine paired cold/warm time ratios per size.
+  Pivot savings use the arithmetic mean of the nine matched pivot counts.
+
+The six acceptance criteria are:
+
+| Metric | Required value |
+|---|---:|
+| `max(abs(A @ z - b))` | at most `1e-7` |
+| `min(z)` | at least `-1e-8` |
+| `max(abs(A.T @ y + r - c_hat))` | at most `1e-7` |
+| `min(r)` | at least `-1e-7` |
+| `abs(f - b.T @ y) / max(1, abs(f), abs(b.T @ y))` | at most `1e-7` |
+| `abs(f - f_ref) / max(1, abs(f_ref))` | at most `1e-7` |
+
+Here `f = c_hat.T @ z`. Full-precision HiGHS reference objectives are read from
+`shared/VALIDATION_SUMMARY.csv` after solving; the four solvers do not use a
+reference optimum or a HiGHS basis for initialization.
+
+## Recorded results
+
+All four methods passed 540 of 540 measured cold runs. Maximum relative
+objective errors were `5.89e-16`, `5.87e-16`, `4.71e-16`, and `2.35e-10` for
+Tableau, Revised, Dual, and IPM, respectively.
+
+| Size | Tableau median ms | Revised median ms | Dual median ms | IPM median ms |
+|---|---:|---:|---:|---:|
+| 3 by 5 | 1.28 | 2.72 | 0.80 | 1.28 |
+| 5 by 10 | 6.89 | 19.31 | 3.79 | 3.20 |
+| 10 by 20 | 240.28 | 437.88 | 183.79 | 27.73 |
+
+Dual basis reuse gives median paired speedups of 4.36, 8.55, and 102.23,
+with mean pivot reductions of 97.1% to 99.5%. Eight of the 27 updated
+instances require zero additional pivots.
+
+## Repository structure
+
+| Directory | Purpose |
+|---|---|
+| `benchmark/` | Common runner, aggregation, verification, and report plotting |
+| `recorded_results/` | Measurements, summaries, environment, and solution archive used in the report |
+| `shared/` | Generator, 54 NPZ/MAT instances, model, and reference objectives |
+| `tableau_simplex/` | Full-tableau solver and tests |
+| `Revised_Simplex/` | Revised simplex solver and individual runner |
+| `dual_simplex/` | Dual simplex solver, basis reuse, and tests |
+| `algorithm_ipm/` | Mehrotra IPM solver and tests |
+| `validation/` | Earlier small-instance validation records |
+| `docs/` | Course requirements, literature, and background report materials |
+| `runs/` | New local runs; excluded from version control |
+
+Results within individual algorithm directories are earlier validation batches.
+The common-machine comparisons in the report use `recorded_results/` exclusively.
+The model and matrix ordering are documented in [shared/README.md](shared/README.md).
+
+## Solver tests
+
+```bash
 python -m unittest discover -s dual_simplex -p "test_dual_simplex.py" -v
 python -m unittest discover -s tableau_simplex -p "test_tableau_simplex.py" -v
-python dual_simplex/run_validation.py --benchmark shared --output runs/dual_small --small-only
-python tableau_simplex/run_benchmark.py --benchmark shared --output runs/tableau_small --small-only
-python Revised_Simplex/run_revised_simplex.py --benchmark shared --output runs/revised_small --small-only
+python -X utf8 algorithm_ipm/test_ipm.py
 ```
 
-Dual Simplex 的小实例包含 base cold、perturbed cold、perturbed warm 三种 case/mode，共 30 次计时和 3 次预热；Tableau 和 Revised Simplex 的 `--small-only` 各运行共同的首个 base 实例，默认 1 次预热和 10 次计时。Revised Simplex 也可加 `--repeats 1` 快速检查。
-
-运行完整 benchmark：
-
-```bash
-python dual_simplex/run_validation.py --benchmark shared --output runs/dual_all
-python tableau_simplex/run_benchmark.py --benchmark shared --output runs/tableau_all
-python Revised_Simplex/run_revised_simplex.py --benchmark shared --output runs/revised_all
-```
-
-Dual Simplex 的完整验证包含 54 个 cold-start 与 27 个 warm-start case/mode；Tableau 和 Revised Simplex 各运行 54 个 cold-start 实例。Dual 和 Tableau runner 要求输出目录尚不存在；Revised runner 会覆盖同名 CSV。重复运行时都建议换新目录，以保留既有记录。
-
-Dual Simplex runner 将线程池限制为 1；Revised Simplex runner 记录线程环境变量，但未测量实际线程数。Revised Simplex 已提交的计时来自 Python 3.12.12、NumPy 2.3.5，不能直接与其他成员的本地计时排名。正式比较需统一机器和线程设置；求解时间包含初始化与迭代，排除磁盘 I/O 和外部 reference 检查。
-
-## 共同优化问题
-
-仓库 i 向客户 j 运送连续货量 x_ij，最小化总运输成本：
-
-```text
-minimize    sum_ij c_ij * x_ij
-subject to  sum_j x_ij <= s_i       每个仓库的供给上限
-            sum_i x_ij  = d_j       每个客户的需求
-            0 <= x_ij <= u_ij       每条路线的容量
-```
-
-加入未用供给 p_i 和未用路线容量 q_ij 后，所有算法读取并求解：
-
-```text
-min c_hat.T @ z,   A @ z = b,   z >= 0
-z = [row-major X; p; row-major Q]
-```
-
-约束按供给、需求、容量排列。容量已经编码在 A 和 b 中，无需额外添加 bounds。矩阵维度为 `(M+N+MN, 2MN+M)`。
-
-详细定义见 [共同模型](shared/SHARED_PROBLEM_SPECIFICATION.md)、[共享入口](shared/START_HERE.md) 和 [比较协议](shared/PROPOSED_COMPARISON_PROTOCOL.md)。
-
-## 加载一个实例并运行 Dual Simplex
-
-在仓库根目录运行以下 Python 代码：
-
-```python
-from pathlib import Path
-import csv
-import numpy as np
-from dual_simplex.dual_simplex import solve
-
-shared = Path("shared")
-case_id = "M03_N05_a030_seed2026_base"
-with np.load(shared / "benchmark_v1/instances" / f"{case_id}.npz", allow_pickle=False) as data:
-    A, b, c_hat = data["A"], data["b"], data["c_hat"]
-
-base = solve(A, b, c_hat)
-assert base["status"] == "optimal"
-X = base["z"][:15].reshape(3, 5)  # 本例为 3 个仓库、5 个客户
-print("objective:", base["objective"])
-
-with (shared / "VALIDATION_SUMMARY.csv").open(encoding="utf-8-sig", newline="") as f:
-    references = {row["case_id"]: float(row["highs_objective"]) for row in csv.DictReader(f)}
-f_ref = references[case_id]
-relative_error = abs(base["objective"] - f_ref) / max(1.0, abs(f_ref))
-print("reference:", f_ref, "relative error:", relative_error)
-
-perturbed_id = "M03_N05_a030_seed2026_demand_perturbed"
-with np.load(shared / "benchmark_v1/instances" / f"{perturbed_id}.npz", allow_pickle=False) as data:
-    assert np.array_equal(A, data["A"])
-    assert np.array_equal(c_hat, data["c_hat"])
-    b_new = data["b"]
-
-cold = solve(A, b_new, c_hat)
-warm = solve(A, b_new, c_hat, warm_start={"basis": base["basis"]})
-assert cold["status"] == warm["status"] == "optimal"
-print("perturbed cold / warm pivots:", cold["iterations"], warm["iterations"])
-```
-
-`solve` 返回 `z, y, r, basis, history, status` 及精度、时间指标。basis 使用零基原始列索引。warm-start 只复制 basis indices，不复用 LU；每次重复从同一个 base optimal basis 开始。
-
-## Benchmark 与 reference
-
-- 规模 `(3,5), (5,10), (10,20)`；alpha 为 `0.3, 0.6, 0.9`；seed 为 `2026, 2027, 2028`。
-- 27 个 base 加 27 个 demand-perturbed 实例，共 54 个 LP；每个同时提供 NPZ 和 MAT。
-- 同一 base/perturbed pair 的 A 和 c_hat 完全相同，仅需求 RHS 改变。
-- 完整精度的 reference objective 位于 `shared/VALIDATION_SUMMARY.csv` 的 `highs_objective` 列，通过 `case_id` 对应。
-- reference 只在 solver 返回后用于验证，不能传入学生求解器用于初始化或优化。
-
-可核对的小实例结果：base cold 8 pivots，objective 约 `776.202970694746`；perturbed cold 8 pivots、warm 2 pivots，objective 均约 `775.088961948288`。浮点路径可能随环境变化，正式判断以容差与 reference 检查为准。
-
-## 方法与已有结果的边界
-
-`dual_simplex.py` 自行执行 basis 构造、Dual Simplex pivot 及停止判断，只使用 NumPy/SciPy 的线性代数例程，不调用外部 LP solver。测试中的 HiGHS 用作独立 oracle。
-
-本实现 cold-start 针对共享运输矩阵和零 slack 成本，不是通用 LP 初始化软件。出现数值阈值下无候选等问题时返回 `numerical_failure`，未实现通用 infeasibility/unboundedness certificate。
-
-已有全量验证记录为 54 cold + 27 warm case/mode，810 次计时及 81 次 warmup 全部通过。详见 [算法验证报告](dual_simplex/IMPLEMENTATION_VALIDATION_REPORT.md)。这些 runtime 来自本地环境，正式四方法时间比较仍需共同环境。
-
-Tableau Simplex 已完成 54 个 cold-start 实例、540 次计时及 54 次 warmup，全部通过精度检查。详见 [Tableau 验证报告](tableau_simplex/IMPLEMENTATION_VALIDATION_REPORT.md)。这些 runtime 同样仅作为本地验证结果。
-
-## 小组协作与上传
-
-共享实例与 Generator 保持一致；其他算法使用独立目录，例如 `revised_simplex/` 和 `primal_dual_ipm/`，避免覆盖 `shared/`。
-
-`.gitignore` 忽略缓存、虚拟环境和 `runs/`；已有验证结果保留追踪。浏览器上传时也不要选择本机复跑产生的 `runs/` 或缓存目录，浏览器不会替你按本地忽略规则筛选。无需上传分发 ZIP 本身。
-
-仓库已有课程资料、文献和报告草稿，保留在 `docs/`；后续报告和 PPT 也可在该目录协作更新。当前没有替三位组员添加虚构实现或结果，也没有代替小组选择开源许可证。仓库发布前按课程要求及小组约定确认可见性，并把真实 repository URL 写入最终 report。
+Revised simplex is also checked on every instance by the common runner and
+independent solution replay.

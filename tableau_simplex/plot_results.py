@@ -1,4 +1,4 @@
-"""Create presentation-ready runtime, iteration, and accuracy figures."""
+"""Plot runtime, iteration counts, and objective accuracy."""
 
 from __future__ import annotations
 

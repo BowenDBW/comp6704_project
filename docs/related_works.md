@@ -34,7 +34,7 @@
 
 **特点**：最坏情况多项式复杂度，大规模稀疏问题上迭代次数少（几十次即收敛）；但每次迭代需解大规模线性方程组（稀疏 Cholesky 分解），难以并行。
 
-### 3. 一阶方法与 GPU 大规模求解（First-Order / GPU Solvers）⭐ 近年最热
+### 3. 一阶方法与 GPU 大规模求解（First-Order / GPU Solvers）
 
 以 Primal-Dual Hybrid Gradient（PDHG，即 PDLP 系列）为代表的可并行一阶方法，是 2023–2026 年 LP 求解器的主战场。
 
@@ -62,7 +62,7 @@
 
 **特点**：node-arc 公式化下多商品流 LP 规模爆炸，分解方法（Dantzig-Wolfe/列生成、Benders）是唯一出路；代价是主问题-子问题迭代有 tailing-off 现象。
 
-### 5. 学习增强优化（Learning-Augmented Optimization）⭐ 前沿方向
+### 5. 学习增强优化（Learning-Augmented Optimization）
 
 用机器学习加速传统求解器（warm-start、参数选择、加速子过程），不改变求解器的精确性保证。
 
@@ -93,7 +93,7 @@
 
 ---
 
-## 二、各方法的 Bottleneck（报告"动机/讨论"部分可直接用）
+## 二、各方法的 Bottleneck
 
 ### Simplex 类
 1. **最坏情况指数复杂度**（Klee–Minty 构造）；平均表现好但缺乏强理论保证，smoothed analysis 是目前最好的解释（`1504.08251`）。
@@ -118,23 +118,8 @@
 1. **泛化性**：在训练分布外的实例上加速效果不保证（`2606.08638` 给出泛化界）。
 2. **信任问题**：学习组件不能破坏精确性与可复现性，只做加速角色。
 
-### 跨方法的核心矛盾（可作为报告的 "gap" 叙事）
+### 跨方法的核心矛盾
 > **精度 vs 规模 vs 并行性三者不可兼得**：单纯形（高精度、顶点解、串行）— IPM（高精度、多项式、难并行）— 一阶方法（可并行、大规模、低精度）。最新的研究趋势是**混合化**（`2603.03150` PDHG+IPM、`1805.12344` ADMM+IPM）和**学习加速**（`2610.01546`）。而运输问题的高度退化性（`2203.02795`）和天然网络结构（网络单纯形）让它在方法对比实验中是一个极有信息量的 benchmark。
-
----
-
-## 三、对课程项目的启示（方法选型建议）
-
-结合 "diversity of comparison methods" 评分点，4 人分工建议：
-
-| 成员 | 实现方法 | 覆盖类别 | 对应文献 |
-|---|---|---|---|
-| A | 原始/修正单纯形法（含 Bland 规则防循环） | 类别 1 | `1510.03339` 类教程 + Chvátal 教材 |
-| B | 对偶单纯形法 | 类别 1 | `1503.01889` |
-| C | 原始-对偶内点法 | 类别 2 | `1510.03339`、`2105.01333` |
-| D | 网络单纯形法（利用运输问题网络结构） | 类别 4 | `1607.02284`、`1706.04302` |
-
-实验设计上可再加一个第三方基线（HiGHS/SciPy 内置求解器）对照，以及退化实例上的灵敏度分析——正好呼应 `2203.02795` 与一阶方法文献中反复提到的 bottleneck。
 
 ---
 
@@ -183,7 +168,7 @@
 - [2016] Munari, P., Dollevoet, T., & Spliet, R. *A generalized formulation for vehicle routing problems.* arXiv:1606.01935
 - [2025] Su, E., et al. *The Freight Multimodal Transport Problem with Buses and Drones: An Integrated Approach for Last-Mile Delivery.* arXiv:2506.10311
 
-### 经典文献（无公开 PDF，需图书馆数据库获取，引用必放）
+### 经典文献（无公开 PDF，需图书馆数据库获取）
 
 - Hitchcock, F. L. (1941). *The Distribution of a Product from Several Sources to Numerous Localities.* Journal of Mathematics and Physics, 20(1-4), 224–230. — 运输问题 LP 的最早公式化
 - Kantorovich, L. V. (1939/1960). *Mathematical Methods of Organizing and Planning Production.* Management Science, 6(4), 366–422. — LP 思想起源

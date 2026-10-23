@@ -1,4 +1,12 @@
-# Preserve delivered bytes and SHA-256 manifests across platforms.
+# Preserve numerical records and source checksums across platforms.
 /shared/** -text
 /dual_simplex/** -text
 /validation/** -text
+/recorded_results/** -text
+/benchmark/** -text
+/Revised_Simplex/revised_simplex.py -text
+/tableau_simplex/tableau_simplex.py -text whitespace=cr-at-eol
+/algorithm_ipm/ipm_solver.py -text
+/MANIFEST.json -text
+/README.md -text
+/requirements.txt -text

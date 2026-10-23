@@ -78,7 +78,7 @@ def test_row_major_ordering() -> None:
     print("[3] row-major recovery on a real benchmark instance")
     import pathlib
     here = pathlib.Path(__file__).resolve().parent
-    inst = here.parent / "COMP6704_Benchmark_v1_validated" / "benchmark_v1" / "instances"
+    inst = here.parent / "shared" / "benchmark_v1" / "instances"
     case = "M03_N05_a030_seed2026_base"
     with np.load(inst / f"{case}.npz", allow_pickle=False) as d:
         A, b, c_hat = d["A"], d["b"], d["c_hat"]

@@ -47,8 +47,8 @@ import scipy
 from ipm_solver import IPMOptions, protocol_metrics, solve_ipm
 
 HERE = Path(__file__).resolve().parent
-BENCH = HERE.parent / "COMP6704_Benchmark_v1_validated"
-RESULTS = HERE / "results"
+BENCH = HERE.parent / "shared"
+RESULTS = HERE.parent / "runs" / "ipm_individual"
 
 ALGORITHM = "primal_dual_ipm"
 PROTOCOL_VERSION = "v1"
@@ -118,7 +118,7 @@ def fmt(x: float) -> str:
 
 
 def main() -> None:
-    RESULTS.mkdir(exist_ok=True)
+    RESULTS.mkdir(parents=True, exist_ok=False)
     (RESULTS / "solutions").mkdir(exist_ok=True)
     (RESULTS / "history").mkdir(exist_ok=True)
 

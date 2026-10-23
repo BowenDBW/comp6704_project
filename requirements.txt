@@ -1,2 +1,4 @@
--r dual_simplex/requirements.txt
--r tableau_simplex/requirements.txt
+numpy==1.26.4
+scipy==1.11.4
+threadpoolctl==3.5.0
+matplotlib==3.8.0

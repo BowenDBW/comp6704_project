@@ -1,10 +1,8 @@
-# 统一问题定义与符号说明（proposed v1）
-
-日期：2026-10-16。用于组内实现、报告和展示的共同基础；待全组确认。本文件补充原 README，不改变已验证的 LP、Generator 或实例数据。
+# 运输问题定义与符号说明
 
 ## 1. 共同研究问题
 
-项目暂定题目：Comparative Analysis of LP Algorithms for Capacitated Transportation Optimization。
+项目题目：Comparative Analysis of LP Algorithms for Capacitated Transportation Optimization。
 
 考虑 M 个仓库向 N 个客户运输一种可连续分配的货物。每个仓库有有限可用供给，每个客户的需求必须恰好满足，每条仓库到客户的运输路线有容量限制。给定单位运输成本，选择各路线运输量，使总成本最小。
 
@@ -14,7 +12,7 @@
 
 ## 2. 符号、代码名称与物理意义
 
-| 符号 | 代码/建议名称 | 维度、范围 | 定义与意义 |
+| 符号 | 代码名称 | 维度、范围 | 定义与意义 |
 |---|---|---|---|
 | M, N | M,N；函数内 m,n | 正整数 | 仓库数量、客户数量 |
 | i, j | i,j | 代码从 0 开始 | 仓库索引、客户索引 |
@@ -68,15 +66,3 @@ Python 零基索引：x_ij 列 i*N+j，p_i 列 K+i，q_ij 列 K+M+i*N+j。行顺
 沿用 README 的 RNG、分布和参数：3 个规模×3 个 alpha×3 个 seed=27 个 base，再配对 27 个 demand-perturbed。s=1.2*row_sum(x_ref)，u=(3−2α)*x_ref。增加 α 仅降低 capacity RHS；扰动仅改变 demand RHS。可行性证明和 54/54 数值验证见 BENCHMARK_VALIDATION_REPORT.md。
 
 正的 x_ref 和 slack 提供可行见证，不强制作为四种算法相同的起点；Simplex 所需 basis 与 IPM 所需内部初值不同。Perturbed 实例仍可行，但并不保证旧 optimal basis 一定失去 primal feasibility 或一定需要 pivot。
-
-## 5. 报告、展示与责任统一
-
-共同叙事顺序：运输场景与动机 → 数学模型及符号 → standard-form 转换 → 四种算法机制及初始化 → 统一实验协议 → 结果及解释 → 结论。全文使用同一符号表、成本定义、需求等式和 capacity 含义。
-
-Generator 负责人维护数据、版本、验证和共享接口；各算法负责人解释并实现自己的初始化、更新步骤、停止条件及失败状态，保存原始结果。实验协调时汇总同一 case_id 的结果。HiGHS 是 reference validation 工具，不替代四种学生算法；也不提供其初始 optimum/basis。
-
-理论复杂度、数值观察和解释应分别陈述。不能仅凭 iteration 数量断言计算效率，也不能把本合成样本的结果写成所有 LP 上的结论。项目整体提交格式与课程要求仍以课程文件为准；本共享规范不重新规定课程要求或成员身份。
-
-## 6. 状态与优先级
-
-数据和模型以原 README、benchmark_config.json 及已验证实例为准；本文件负责统一解释。比较与输出格式以 PROPOSED_COMPARISON_PROTOCOL.md 为当前工作草案。若发现冲突，应先协调，不单方面改变数据、模型或算法比较口径。正式实验前由组员确认并冻结协议版本。

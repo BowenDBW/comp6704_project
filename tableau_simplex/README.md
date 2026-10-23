@@ -1,5 +1,8 @@
 # COMP6704 Two-Phase Tableau Simplex
 
+Common-machine report results and full reproduction: [root README](../README.md).
+
+
 Independent implementation of Algorithm 1 for the shared capacitated
 transportation LP benchmark. The solver consumes the released `A`, `b`, and
 `c_hat` arrays directly and does not regenerate or modify benchmark data.
@@ -14,7 +17,7 @@ transportation LP benchmark. The solver consumes the released `A`, `b`, and
 | `summarize_results.py` | Per-case and per-size aggregation |
 | `plot_results.py` | Runtime, pivot-count and accuracy figure generation |
 | `IMPLEMENTATION_VALIDATION_REPORT.md` | Measured validation results and limitations |
-| `results/` | Delivered raw results, summaries, environment, solutions, histories and figures |
+| `results/` | Individual validation results, summaries, environment, solutions, histories and figures |
 
 ## Solver interface
 

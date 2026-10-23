@@ -1,8 +1,6 @@
-# COMP6704 Benchmark Validation Report
+# Benchmark Validation
 
-Date: 2026-10-16 (Asia/Hong_Kong). **Technical result: PASS, 54/54 instances.** Group adoption of the proposed specification is still pending. No model, parameter, source implementation, or original generated data was changed. No Tableau Simplex, Revised Simplex, Dual Simplex, or IPM implementation was added.
-
-Documentation addendum (2026-10-16): SHARED_PROBLEM_SPECIFICATION.md now unifies the problem narrative, assumptions, symbols and physical meanings. PROPOSED_COMPARISON_PROTOCOL.md supplies proposed v1 stopping metrics, interfaces, timing and warm-start conventions, with ENVIRONMENT_TEMPLATE.md and result_schema.csv. These are working proposals, not group approval or validation of student solvers. The numerical evidence below is unchanged; this documentation-only update does not regenerate instances. GROUP_MESSAGE_ZH.md is the distribution message.
+Validation date: 2026-10-16. All 54 instances passed the saved-file checks below.
 
 ## 1. Mathematical model and feasibility
 
@@ -63,15 +61,3 @@ Reference optimum range: 449.07651248888965 to 3904.3855240640569. All 54 values
 Exact numerical equality was confirmed from independent generation, not merely inferred from equal seeds. This establishes reproducibility in the recorded environment, not a promise across arbitrary future NumPy versions.
 
 NPZ byte hashes matched in 54/54 pairs; MAT byte hashes matched in 0/54 pairs. For 54/54 MAT pairs, every byte after the 128-byte MAT header matched, localizing the difference to file header metadata. Both MAT loads yielded exactly identical arrays. Byte-for-byte reproducibility is therefore not claimed for the full release; numerical reproducibility passes.
-
-## 7. Confirmed issues and severity
-
-No mathematical or implementation error was found for the requested configuration. Low-severity limitations: `assert` checks are disabled by `python -O`; original manifest objectives are rounded; built-in validation alone omits MAT reload, full finiteness checks and a second generation; exporting into an occupied directory can overwrite matching files or leave partial output after failure. These do not invalidate this release: ordinary Python, fresh output directories and the independent validator were used. See PHASE1_AUDIT.md for the pre-generation review. Source corrections are not required and none were made.
-
-Optional improvements are dependency pinning in future generator releases, explicit exceptions, full-precision manifest objectives and MAT hashes. This package supplies environment versions, full-precision validation objectives and both-format hashes without modifying the generator. The old data directory was preserved, not recertified as a separate release.
-
-## 8. Distribution recommendation and remaining decisions
-
-The package is technically ready for group review and distribution as a **proposed** benchmark. Group approval remains needed for the model/order, 27+27 instance grid, shared timing environment/thread settings, primal/dual stopping tolerances, and cold-start versus warm-start timing conventions (including initialization cost). Existing README.md remains the mathematical specification; START_HERE.md provides the release workflow. A feasible witness is not a basic feasible solution. A Dual Simplex warm start requires the member's own valid prior optimal basis; NPZ/MAT files do not contain one. An RHS change preserves reduced costs for a fixed basis, but this audit does not claim every perturbation forces a pivot.
-
-Recommended next step: circulate this validated package for specification approval, then have each member load one common case and report objective and primal residual before implementing the complete comparison protocol.

@@ -1,6 +1,9 @@
 # Part 2: Revised Simplex — Code and Results
 
-**One-sentence result:** The solver passed all 54 released cases in cold-start mode: 540/540 measured runs and 54/54 warm-ups were optimal under the proposed v1 checks.
+Common-machine report results and full reproduction: [root README](../README.md).
+
+
+The solver passed all 54 released cases in cold-start mode: 540/540 measured runs and 54/54 warm-ups were optimal under the shared checks.
 
 ## Files
 
@@ -18,7 +21,7 @@
 
 In `revised_simplex.py`, `solve(A, b, c_hat, {"M": M, "N": N})` checks and copies the inputs, starts the timer, and coordinates two phases. `_phase_one` adds temporary variables to the demand rows to find a feasible basis, then removes those variables. `_simplex` performs the same revised-simplex pivot loop in both phases: solve the current basis equations, calculate reduced costs, choose an entering column, apply the minimum-ratio test, and replace one basis column. Phase II uses the original transport costs. `_optimality` checks feasibility and dual conditions before an `optimal` status is accepted. The returned dictionary also contains the solution, basis, iteration counts, and an in-memory history.
 
-In `run_revised_simplex.py`, the default run loads the 54 supplied NPZ cases (27 base and 27 demand-perturbed). Each case has one warm-up and ten independent measured cold starts. The runner checks all six proposed v1 criteria, using the HiGHS reference objective only **after** each solve. It writes one row per measured run, case and alpha summaries, and three representative Phase II histories. Use `--small-only` for the shared first case or `--case-id` for another case; choose a separate output folder to preserve the full results.
+In `run_revised_simplex.py`, the default run loads the 54 supplied NPZ cases (27 base and 27 demand-perturbed). Each case has one warm-up and ten independent measured cold starts. The runner checks all six shared criteria, using the HiGHS reference objective only **after** each solve. It writes one row per measured run, case and alpha summaries, and three representative Phase II histories. Use `--small-only` for the shared first case or `--case-id` for another case; choose a separate output folder to preserve the full results.
 
 ## Run
 
@@ -52,7 +55,7 @@ Each history contains only Phase II because Phase I minimizes a different, artif
 
 For example, measured repeat 1 of `M03_N05_a030_seed2026_base` reports objective `776.202970694746`, 25 pivots (15 in Phase I and 10 in Phase II), and relative reference error about `1.46e-16`.
 
-| Check across all 540 measured rows | Worst observed value | Proposed v1 limit |
+| Check across all 540 measured rows | Worst observed value | Shared limit |
 |---|---:|---:|
 | Primal residual, maximum | `1.39e-13` | `≤ 1e-7` |
 | Minimum component of `z` | `-2.66e-15` | `≥ -1e-8` |

@@ -1,6 +1,6 @@
 # Dual Simplex implementation validation
 
-Date: 2026-10-16. **PASS for the shared benchmark and proposed comparison protocol v1.** This is a local implementation validation, not final approval of group timing settings or a four-algorithm comparison.
+Date: 2026-10-16. **PASS for the shared benchmark and shared acceptance criteria.** This is a local implementation validation, separate from the common-machine comparison in `recorded_results/`.
 
 ## Implementation
 
