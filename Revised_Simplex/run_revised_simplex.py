@@ -1,4 +1,19 @@
-"""Run the released benchmark and save results and comparison summaries"""
+"""Run revised simplex on the shared transportation benchmark.
+
+The command-line runner loads standard-form LPs and reference objectives:
+
+    minimize c_hat.T @ z
+    subject to A @ z = b, z >= 0
+
+Each selected instance receives a warmup and repeated cold-start solves.
+Returned solutions are checked against the shared feasibility, optimality,
+and reference-objective tolerances. Reference objectives are used only for
+validation and are not passed to the solver.
+
+The runner saves CSV results, comparison summaries, and iteration histories
+for selected cases. Command-line options control the input and output paths,
+instance selection, repeat count, and per-phase pivot limit.
+"""
 import argparse
 import csv
 from datetime import datetime, timezone
