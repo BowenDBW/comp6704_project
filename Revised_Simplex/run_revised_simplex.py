@@ -1,10 +1,18 @@
-"""Run the released benchmark and save results and comparison summaries.
+"""Run revised simplex on the shared transportation benchmark.
 
-Run: python -B run_revised_simplex.py
-The default benchmark directory is the sibling ../shared folder.
-Default: all 54 cases, one warm-up and ten measured cold starts per case.
-For the shared first case, add --small-only --output runs/revised_small.
-Use --repeats 1 for a faster check. The default results CSV is replaced after completion.
+The command-line runner loads standard-form LPs and reference objectives:
+
+    minimize c_hat.T @ z
+    subject to A @ z = b, z >= 0
+
+Each selected instance receives a warmup and repeated cold-start solves.
+Returned solutions are checked against the shared feasibility, optimality,
+and reference-objective tolerances. Reference objectives are used only for
+validation and are not passed to the solver.
+
+The runner saves CSV results, comparison summaries, and iteration histories
+for selected cases. Command-line options control the input and output paths,
+instance selection, repeat count, and per-phase pivot limit.
 """
 import argparse
 import csv
@@ -24,7 +32,7 @@ HISTORY_CASE_IDS = {
 
 # Summarize the timestamp and reported environment settings in one CSV field.
 def _environment_id():
-    """Keep a compact environment record in each CSV row instead of a separate file."""
+    """Keep a compact environment record in each CSV row."""
     run_time = datetime.now(timezone.utc).strftime("%Y%m%dT%H%M%S%fZ")
     configuration = np.show_config(mode="dicts")
     dependencies = configuration.get("Build Dependencies", {})
@@ -98,14 +106,14 @@ def _evaluate(A, b, c, result, reference):
 
 # Sort cases order.
 def _case_order(row):
-    """Order cases by size, capacity, seed, then base before perturbation."""
+    """Order cases by size, capacity, seed; then base before perturbation."""
     return (int(row["M"]), int(row["N"]), float(row["alpha"]),
             int(row["seed"]), row["kind"] != "base")
 
 
 # Reduce repeated runs to one comparison row per case.
 def _case_summary(records):
-    """Summarize successful timings and all available accuracy checks by case."""
+    """Summarize successful timings and all available accuracy checks case by case."""
     groups = {}
     for record in records:
         groups.setdefault(record["case_id"], []).append(record)

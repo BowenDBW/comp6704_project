@@ -1,8 +1,19 @@
-"""Revised Simplex for the released transportation LP.
+"""Two-phase primal revised simplex using dense basis solves.
 
-Call solve(A, b, c_hat, {"M": M, "N": N}). M and N come from manifest.csv.
-Inputs are from the dataset generated. Basis indices start at zero. This file performs no file IO.
-Invalid inputs raise ValueError; numerical failures return a status.
+The public solver handles the shared transportation LP in equality standard form::
+
+    minimize c_hat.T @ z
+    subject to A @ z = b, z >= 0
+
+Phase I adds one artificial variable per demand constraint to find a feasible
+basis. Phase II restores the original costs and computes basic values, dual
+multipliers, and pivot directions by solving systems with the current basis
+matrix, without maintaining a full tableau or an explicit basis inverse.
+
+Call solve(A, b, c_hat, {"M": M, "N": N}) with dimensions from manifest.csv.
+Inputs must follow the shared matrix ordering and have a nonnegative RHS.
+The result includes solution arrays, zero-based basis indices, status, pivot
+counts, timing, and iteration history. This module performs no file I/O.
 """
 from time import perf_counter
 
