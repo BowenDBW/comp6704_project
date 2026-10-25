@@ -1,9 +1,4 @@
-"""Revised Simplex for the released transportation LP.
-
-Call solve(A, b, c_hat, {"M": M, "N": N}). M and N come from manifest.csv.
-Inputs are from the dataset generated. Basis indices start at zero. This file performs no file IO.
-Invalid inputs raise ValueError; numerical failures return a status.
-"""
+"""Revised Simplex for the released transportation LP."""
 from time import perf_counter
 
 import numpy as np

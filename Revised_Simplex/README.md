@@ -31,7 +31,7 @@ The runner reads the repository's sibling `shared/` folder by default. From `Rev
 python -B run_revised_simplex.py
 ```
 
-From the repository root, the same flags as the other group runners work:
+From the repository root:
 
 ```sh
 python -B Revised_Simplex/run_revised_simplex.py --benchmark shared --output runs/revised_small --small-only
