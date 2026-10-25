@@ -4,7 +4,7 @@ Date: 2026-10-16. **PASS for the shared benchmark and shared acceptance criteria
 
 ## Implementation
 
-dual_simplex.py implements dual simplex pivots using fresh dense LU factorizations. Cold start selects each customer's cheapest transport route plus every supply/capacity slack, giving an invertible dual-feasible basis analytically. It uses no external LP solution or basis; phase1_iterations=0 because no auxiliary Phase I is needed. Warm start copies only the algorithm's own base optimal basis indices; all factorizations and RHS updates are timed. Complete derivation, index conventions and limitations are in README.md.
+dual_simplex.py implements dual simplex pivots using fresh dense LU factorizations. Cold start selects each customer's cheapest transport route plus every supply/capacity slack, giving an invertible dual-feasible basis analytically. It uses no external LP solution or basis; phase1_iterations=0 because no auxiliary Phase I is needed. Warm start copies only the algorithm's own base optimal basis indices; all factorizations and RHS updates are timed.
 
 ## Small shared interface case
 
@@ -44,6 +44,6 @@ Times include input/state copying, cold initialization or warm preparation, dens
 
 This implementation recognizes the exact shared matrix and zero slack objective structure for cold start. It does not claim arbitrary-LP initialization, reliable generic infeasibility/unboundedness certificates, or optimized rank-one basis updates. A no-eligible-pivot event is reported as numerical_failure rather than an unsupported infeasibility claim. Floating-point pivot tolerances may matter outside the tested data.
 
-All 125 shared-package files are unchanged, and the deployed shared package matches the workspace copy. All 112 original Generator/data files match their original SHA-256 snapshot. No shared benchmark parameter, matrix, code, README or distribution ZIP was changed for this implementation. This solver and its evidence reside in a separate directory.
+All 125 shared-package files are unchanged, and the deployed shared package matches the workspace copy. All 112 original Generator/data files match their original SHA-256 snapshot. No shared benchmark parameter, matrix, code or distribution ZIP was changed for this implementation. This solver and its evidence reside in a separate directory.
 
 Next step: use this interface and results in the group's joint integration; agree final runtime environment and resource limits before comparing against the other three implementations.

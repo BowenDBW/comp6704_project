@@ -63,6 +63,6 @@ Python 零基索引：x_ij 列 i*N+j，p_i 列 K+i，q_ij 列 K+M+i*N+j。行顺
 
 ## 4. 实例构造与实验边界
 
-沿用 README 的 RNG、分布和参数：3 个规模×3 个 alpha×3 个 seed=27 个 base，再配对 27 个 demand-perturbed。s=1.2*row_sum(x_ref)，u=(3−2α)*x_ref。增加 α 仅降低 capacity RHS；扰动仅改变 demand RHS。可行性证明和 54/54 数值验证见 BENCHMARK_VALIDATION_REPORT.md。
+沿用统一生成器的 RNG、分布和参数：3 个规模×3 个 alpha×3 个 seed=27 个 base，再配对 27 个 demand-perturbed。s=1.2*row_sum(x_ref)，u=(3−2α)*x_ref。增加 α 仅降低 capacity RHS；扰动仅改变 demand RHS。可行性证明和 54/54 数值验证见 BENCHMARK_VALIDATION_REPORT.md。
 
 正的 x_ref 和 slack 提供可行见证，不强制作为四种算法相同的起点；Simplex 所需 basis 与 IPM 所需内部初值不同。Perturbed 实例仍可行，但并不保证旧 optimal basis 一定失去 primal feasibility 或一定需要 pivot。

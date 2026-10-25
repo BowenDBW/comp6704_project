@@ -1,5 +1,5 @@
 {
-  "README.md": "d96e78e77115c90631e9626f0f655352a0ddb45cf10449f45db998001309577f",
+  "README.md": "1d813ce82996df292ae96ccec3dee3abb93821f8b2ef016f6c1e87857cda6c3f",
   "Revised_Simplex/revised_simplex.py": "4e090ebfa6ed0c33c4b02887c2050442ba2db6edfda76ab3cf64e34cd76f761a",
   "algorithm_ipm/ipm_solver.py": "0c256c5f340f80bbf66a5f9f4d35b831f90de954d0f58957a16be6215ef05c87",
   "benchmark/plot_report.py": "a312afb65b3cdf2fc4ecb1cc75ef0d1d438f95fdfb0f7d27c824948e793c8018",
@@ -8,7 +8,6 @@
   "benchmark/summarize_unified.py": "74bf0da289f86e4796ff47f49c9771c830641c7590a37f95530a00c7f7e99926",
   "benchmark/verify_recorded_results.py": "e6bed1b8a78cb936b525a9a03bc783c15ed276948f6d53616fa4d7c41a31ef11",
   "dual_simplex/dual_simplex.py": "cb5164d2a7d0ca6197f624052d9df34878583c360f61d9e20e6d45db34cdab8a",
-  "recorded_results/README.md": "2cb00827a71f9161b340e4fa2eb590fb054c65a336f41f9e5022e3bf48bde000",
   "recorded_results/accuracy_summary.csv": "00f2ec4970d656b5bd01b7f55f390cb5bfaa2ad9349b26c4752c5c5d81b2592d",
   "recorded_results/case_summary.csv": "510ca6800bd471a5523880b6aec2bce16d5238ae1244ba7242d4507a53bd1369",
   "recorded_results/completion.json": "e3de2a8d002a966b1b88392afc37ee42efea945ce8747f0075b8462f00214c6b",

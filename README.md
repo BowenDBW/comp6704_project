@@ -22,23 +22,19 @@ python -m pip install -r requirements.txt
 The recorded environment is Python 3.11.15, NumPy 1.26.4, SciPy 1.11.4, and
 Intel Core i7-12700 on Windows, using MKL 2023.1. The runner restricts numerical
 thread pools to one thread and saves the actual environment and solver options.
-Runtime depends on hardware, BLAS implementation, and system load; new timings
-need not equal the archived measurements.
 
 ## Reproduce the experiments
-
-Run the complete benchmark, verify every saved solution, and generate the
-summary tables and comparison figures:
 
 ```bash
 python -X utf8 benchmark/reproduce.py --output runs/reproduction
 ```
 
-The output directory must not already exist. Use a different `--output` path
-for another run. The command executes 2,160 measured cold starts, 270 measured
-dual warm starts, and 243 untimed warmups. A failed acceptance check produces a
-nonzero exit status. The complete run takes several minutes on the recorded
-machine.
+The output directory must not already exist; use a different `--output` path for
+another run. The command executes the full benchmark (2,160 measured cold starts,
+270 measured dual warm starts, and 243 untimed warmups), verifies every saved
+solution, and generates the summary tables and comparison figures. A failed
+acceptance check produces a nonzero exit status. The complete run takes several
+minutes on the recorded machine.
 
 The two numerical stages can also be run separately:
 
@@ -49,20 +45,10 @@ python benchmark/plot_report.py --input runs/reproduction --output runs/reproduc
 ```
 
 `summarize_unified.py` independently recomputes the six acceptance metrics from
-each saved solution and the original input arrays. The generated files are:
-
-| File | Contents |
-|---|---|
-| `runs_including_warmups.csv` | All 2,673 solver calls, including repeat 0 warmups |
-| `measured_runs.csv` | The 2,430 measured calls |
-| `case_summary.csv` | Median runtime and iteration count for each case, method, and mode |
-| `accuracy_summary.csv` | Success counts and worst errors for the four cold-start methods |
-| `size_summary.csv` | Runtime medians, quartiles, and step counts by method and size |
-| `warm_start_summary.csv` | Paired speedups, mean pivot counts, reductions, and zero-pivot counts |
-| `solutions/` | One NPZ containing `z`, `y`, `r`, and available basis indices per measured call |
-| `environment.json` | Runtime, numerical libraries, thread pools, tolerances, and options |
-| `completion.json`, `independent_replay.json` | Run completion and solution verification counts |
-| `figures/` | Runtime, iterations, accuracy, basis reuse, and report comparison figures |
+each saved solution and the original input arrays. Outputs include per-call run
+CSVs, per-case summaries (`case_summary.csv`, `accuracy_summary.csv`,
+`size_summary.csv`, `warm_start_summary.csv`), all saved solution vectors, the
+environment record, and `figures/comparison_overview.pdf`.
 
 ## Verify the reported results
 
@@ -73,46 +59,25 @@ check requires only the Python standard library:
 python benchmark/verify_recorded_results.py
 ```
 
-The checker verifies the file manifest, numerical input and solver hashes,
-run coverage, recorded acceptance metrics, reference-objective errors, and all
-reported table values. Add `--json` for the recalculated quartiles and paired
-pivot statistics. The quick check does not run the solvers or reconstruct
-residuals from solution vectors.
-
-To replay every archived solution and regenerate the tables and figures from
-the recorded measurements:
-
-```bash
-python -X utf8 benchmark/summarize_unified.py --input recorded_results --output runs/recorded_summary
-python benchmark/plot_report.py --input runs/recorded_summary --output runs/recorded_summary/figures
-```
-
-The report's accuracy, step-count, runtime, and basis-reuse tables correspond to
-`accuracy_summary.csv`, `size_summary.csv`, and `warm_start_summary.csv`, respectively.
-The two-panel report figure is `figures/comparison_overview.pdf`.
+The checker verifies the file manifest, numerical input and solver hashes, run
+coverage, recorded acceptance metrics, reference-objective errors, and all
+reported table values. It does not run the solvers.
 
 ## Experimental protocol
 
-- Sizes: 3 by 5, 5 by 10, and 10 by 20 warehouses and customers.
-- Each size has three capacity levels, three seeds (2026, 2027, 2028), and
-  original or perturbed demands: 18 instances per size, 54 in total.
-- Route capacity is `(3 - 2*alpha) * x_ref`, with `alpha` equal to 0.3, 0.6,
-  or 0.9. Each customer's demand perturbation is independently uniform within
-  plus or minus 5%. Within a base/perturbed pair, only the demand RHS changes.
-- Each method receives one warmup and ten measured cold solves per instance.
-  Method order rotates by instance and repetition. Timing covers the complete
-  solver call, including initialization, and excludes input loading and external
-  verification.
-- Runtime is first summarized by the median of ten repeats per instance, then
-  by the median across the 18 instances at each size. Q1 and Q3 use linear
-  interpolation across those 18 instance medians.
-- Dual warm starts reuse the basis from the first measured base solve.
-  Every repetition starts from a separate copy of that basis. Factorization
-  and updated RHS calculations are timed; the earlier base solve is excluded.
-- Warm speedup is the median of nine paired cold/warm time ratios per size.
-  Pivot savings use the arithmetic mean of the nine matched pivot counts.
+- Sizes: 3 by 5, 5 by 10, and 10 by 20 warehouses and customers; three capacity
+  levels, three seeds, and original or perturbed demands give 54 instances.
+- Route capacity is `(3 - 2*alpha) * x_ref` with `alpha` in {0.3, 0.6, 0.9};
+  each demand perturbation is independently uniform within plus or minus 5%.
+- Each method receives one warmup and ten measured cold solves per instance,
+  serially with one numerical thread; method order rotates by instance and
+  repetition. Runtime is summarized by the median of ten repeats per instance,
+  then by the median across the 18 instances at each size.
+- Dual warm starts reuse the basis from the first measured base solve. Warm
+  speedup is the median of nine paired cold/warm time ratios per size; pivot
+  savings use the arithmetic mean of the nine matched pivot counts.
 
-The six acceptance criteria are:
+The six acceptance criteria, evaluated on the unscaled input arrays:
 
 | Metric | Required value |
 |---|---:|
@@ -140,8 +105,7 @@ Tableau, Revised, Dual, and IPM, respectively.
 | 10 by 20 | 240.28 | 437.88 | 183.79 | 27.73 |
 
 Dual basis reuse gives median paired speedups of 4.36, 8.55, and 102.23,
-with mean pivot reductions of 97.1% to 99.5%. Eight of the 27 updated
-instances require zero additional pivots.
+with mean pivot reductions of 97.1% to 99.5%.
 
 ## Repository structure
 
@@ -160,7 +124,6 @@ instances require zero additional pivots.
 
 Results within individual algorithm directories are earlier validation batches.
 The common-machine comparisons in the report use `recorded_results/` exclusively.
-The model and matrix ordering are documented in [shared/README.md](shared/README.md).
 
 ## Solver tests
 
